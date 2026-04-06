@@ -1,5 +1,5 @@
 {
-  "id": "ac3399a0-7eef-4600-8917-ce9e43d2dd7e",
+  "id": "092d6ed6-c249-4da6-b6a6-2fc56278beba",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -101,6 +101,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "CommitUrl": {
+          "name": "CommitUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
         "description": {
           "name": "description",
           "type": "varchar",
@@ -155,6 +161,12 @@
         },
         "RepoName": {
           "name": "RepoName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RepoUrl": {
+          "name": "RepoUrl",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true

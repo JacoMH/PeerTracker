@@ -5,15 +5,18 @@ import { useRouter } from "next/navigation";
 import { useParams } from 'next/navigation'
 import { supabase } from "@/lib/supabase";
 
-// Student modules
-import StudentMenu from "@/app/dashboard/components/menu/StudentMenu";
-import SupervisorMenu from "@/app/dashboard/components/menu/SupervisorMenu";
+// Modules
 import ConnectGithub from "@/app/sharedComponents/ConnectGithub";
+
+// Student Modules
+
+// Supervisor Modules
 
 export default function DashboardPage() {
     const [role, setRole] = useState<String | null>(null);
     const [TeamID, setTeamID] = useState<String>("");     //export const so it can be used for redirect when coming hack from github auth page
     const [toggleGithubIntegration, setToggleGithubIntegration] = useState<boolean>(false);
+    const [toggleGithubRepo, setToggleGithubRepo] = useState<boolean>(false); //toggles on when the team has github repos
     const router = useRouter();
     const params = useParams();
 
@@ -35,6 +38,13 @@ export default function DashboardPage() {
         setTeam();
         checkgithubintegration();
     }, [])
+
+    useEffect(() => {
+        if (toggleGithubIntegration === true) {
+            // fetch if there is a github repo already assigned to the team
+            FetchGithubRepo();
+        }
+    }, [toggleGithubIntegration])
     return (
         role === "Student" ? (
             <main>
@@ -43,10 +53,21 @@ export default function DashboardPage() {
                     {/* connect your Github window*/}
                     {!toggleGithubIntegration ? (
                         <ConnectGithub RedirectTeamID={TeamID} /> // Pass TeamID to connectgithub to help with redirect https://www.youtube.com/watch?v=s6DGVtkX9R0
-
                     ) : (
                         <div>
-                            {/* put teamID into all the modules to get the right data */}
+                            {
+                                toggleGithubRepo ? (
+                                    <div>
+                                        {/* all the main stuff goes here, put teamID into all the modules to get the right data */}
+                                        github repo exists
+                                    </div>
+                                ) : (
+                                    <div>
+                                        {/* link here to module that allows user to select github repo for the team */}
+                                        no github repo
+                                    </div>
+                                )
+                            }
                         </div>
                     )
                     }
@@ -57,15 +78,25 @@ export default function DashboardPage() {
                 <section>
                     {/*Dashboard for supervisor*/}
                     {/* Connect your github window */}
-                    <ConnectGithub RedirectTeamID={TeamID} />
-                    {
-                        !toggleGithubIntegration ? (
-                            <ConnectGithub RedirectTeamID={TeamID} />
-                        ) : (
-                            <div>
-                                {/* put teamID into all the modules to get the right data */}
-                            </div>
-                        )
+                    {!toggleGithubIntegration ? (
+                        <ConnectGithub RedirectTeamID={TeamID} />
+                    ) : (
+                        <div>
+                            {
+                                toggleGithubRepo ? (
+                                    <div>
+                                        modules here
+                                    </div>
+                                ) : (
+                                    <div>
+                                        {/* supervisor modules here */}
+                                        no github repo for modules
+                                    </div>
+                                )
+                            }
+                            {/* put teamID into all the modules to get the right data */}
+                        </div>
+                    )
                     }
                 </section>
             </main>
@@ -97,6 +128,30 @@ export default function DashboardPage() {
 
         if (response.message === "Successful verification") {
             setToggleGithubIntegration(true);
+        }
+        console.log("response: ", response);
+    }
+
+    async function FetchGithubRepo() {
+        const { data } = await supabase.auth.getSession();
+        const access_token = data?.session?.access_token;
+
+        const res = await fetch(`/api/auth/github/fetchgithubrepo?TeamID=${TeamID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${access_token}`
+            }
+        });
+
+        if (!res.ok) {
+            console.log("Error fetching github repo:", res)
+        }
+
+        const response = await res.json();
+
+        if (response.message === "Github Repos Exist") {
+            setToggleGithubRepo(true);
         }
         console.log("response: ", response);
     }

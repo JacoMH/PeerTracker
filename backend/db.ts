@@ -37,6 +37,7 @@ export const githubrepos = pgTable("githubrepos", {
     RepoID: varchar("RepoID").primaryKey().notNull(),
     TeamID: uuid("TeamID").notNull().references(() => teams.TeamID, { onDelete: "cascade" }),
     RepoName: varchar("RepoName").notNull(),
+    RepoUrl: varchar("RepoUrl").notNull(),
     has_webhook: boolean("has_webhook").notNull().default(false),
 })
 
@@ -46,6 +47,7 @@ export const githubcommits = pgTable("githubcommits", {
     AccountID: varchar("AccountID").notNull(),
     section: varchar("section"),
     name: varchar("name").notNull(),
+    CommitUrl: varchar("CommitUrl").notNull(),
     description: varchar("description"),
     date_created: timestamp("date_created").notNull().defaultNow(),
 })

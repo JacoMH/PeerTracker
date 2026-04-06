@@ -20,36 +20,35 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
         }
         const userId = userResponse.data.user.id;
 
-        //subquery
-        const memberCountSubquery = db.select({
-            count: count().as("count"),
-            TeamID: invites.TeamID
-        })
-            .from(invites)
-            .where(eq(invites.status, "Accepted"))
-            .groupBy(invites.TeamID)
-            .as("member_count");
-
-        const fetchSupervisorTeams = await db.select({
+        const studentCountSubquery = await db.select({
             TeamID: invites.TeamID,
-            TeamName: teams.TeamName,
-            MemberCount: memberCountSubquery.count
+            StudentCount: count().as("count")
         })
             .from(invites)
-            .innerJoin(users, eq(users.UserID, invites.SupervisorID))
-            .innerJoin(teams, eq(teams.TeamID, invites.TeamID))
-            .leftJoin(memberCountSubquery, eq(memberCountSubquery.TeamID, teams.TeamID))
+            .innerJoin(users, eq(users.UserID, invites.UserID))
             .where(
                 and(
-                    eq(invites.SupervisorID, userId.toString()),
+                    eq(users.Role, "Student"),
                     eq(invites.status, "Accepted")
-                )
-            )
-            .groupBy(invites.TeamID, teams.TeamName, memberCountSubquery.count)
-            .execute()
+                ))
+            .groupBy(invites.TeamID)
+            .as("student_count");
 
-        console.log("Supervisor Teams:", fetchSupervisorTeams);
-        return res.status(200).json({ message: "Fetched User", data: fetchSupervisorTeams });
+        const supervisorTeam = await db.select({
+            TeamID: invites.TeamID,
+            TeamName: teams.TeamName,
+            StudentCount: studentCountSubquery.StudentCount
+        })
+            .from(invites)
+            .innerJoin(teams, eq(teams.TeamID, invites.TeamID))
+            .leftJoin(studentCountSubquery, eq(studentCountSubquery.TeamID, invites.TeamID))
+            .where(
+                    eq(invites.SupervisorID, userId)
+            )
+            .execute();
+
+        console.log("Supervisor Teams:", supervisorTeam);
+        return res.status(200).json({ message: "Fetched User", data: supervisorTeam });
     }
     catch (error) {
         console.log("Error fetching teams:", error);

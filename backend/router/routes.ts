@@ -12,6 +12,7 @@ import usersearch from '../modules/supervisor/usersearch.ts'
 import createteam from '../modules/supervisor/createteam.ts'
 import githubConnect from 'modules/user/githubconnect.ts';
 import verifygithub from 'modules/github/verifygithub.ts';
+import fetchgithubrepo from 'modules/github/fetchgithubrepo.ts'
 
 // Routes
 
@@ -35,4 +36,5 @@ router.post('/updateinvites', updateinvites);
 
 // Github
 router.get('/verifygithub', verifygithub);
+router.get('/fetchgithubrepo', fetchgithubrepo)
 export default router;
