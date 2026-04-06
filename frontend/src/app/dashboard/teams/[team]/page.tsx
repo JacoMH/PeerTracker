@@ -12,7 +12,7 @@ import ConnectGithub from "@/app/sharedComponents/ConnectGithub";
 
 export default function DashboardPage() {
     const [role, setRole] = useState<String | null>(null);
-    const [TeamID, setTeamID] = useState<String>("");
+    const [TeamID, setTeamID] = useState<String>("");     //export const so it can be used for redirect when coming hack from github auth page
     const [toggleGithubIntegration, setToggleGithubIntegration] = useState<boolean>(false);
     const router = useRouter();
     const params = useParams();
@@ -42,7 +42,7 @@ export default function DashboardPage() {
                     {/*Dashboard for student*/}
                     {/* connect your Github window*/}
                     {!toggleGithubIntegration ? (
-                        <ConnectGithub />
+                        <ConnectGithub RedirectTeamID={TeamID} /> // Pass TeamID to connectgithub to help with redirect https://www.youtube.com/watch?v=s6DGVtkX9R0
 
                     ) : (
                         <div>
@@ -57,10 +57,10 @@ export default function DashboardPage() {
                 <section>
                     {/*Dashboard for supervisor*/}
                     {/* Connect your github window */}
-                    <ConnectGithub />
+                    <ConnectGithub RedirectTeamID={TeamID} />
                     {
                         !toggleGithubIntegration ? (
-                            <ConnectGithub />
+                            <ConnectGithub RedirectTeamID={TeamID} />
                         ) : (
                             <div>
                                 {/* put teamID into all the modules to get the right data */}

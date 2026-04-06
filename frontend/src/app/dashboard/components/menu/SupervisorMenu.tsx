@@ -45,10 +45,7 @@ export default function SupervisorMenu() {
                             supervisorTeam.map((team: any) => (
                                 <div key={team.TeamID} className="flex justify-between p-3 bg-gray-600 rounded-2xl">
                                     <div>{team.TeamName}</div>
-                                    {Array.from({ length: team.MemberCount || 0 }).map((_, i) => (
-                                        <span key={i}><UserIcon /></span>
-                                    ))}
-                                    <div>{team.MemberCount + "Members" || team.MemberCount === 1 ? "1 Member" : "0 Members"}</div>
+                                    <div><UserIcon/>{team.MemberCount + "Members" || team.MemberCount === 1 ? "1 Member" : "0 Members"}</div>
                                     <button onClick={() => router.push(`/dashboard/teams/${team.TeamID}`)}>View Team</button>
                                 </div>
                             ))

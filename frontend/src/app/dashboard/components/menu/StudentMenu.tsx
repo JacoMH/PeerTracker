@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import { UserTeam } from '@/interfaces/UserTeam';
 import { useRouter } from 'next/navigation';
 
-
-
 export default function StudentMenu() {
     const [userTeam, setUserTeam] = useState<UserTeam[]>([]);
     const [userInvites, setUserInvites] = useState<UserTeam[]>([]);
@@ -38,10 +36,7 @@ export default function StudentMenu() {
                         userTeam.map((team: any) => (
                             <div key={team.TeamID} className="flex justify-between p-3 bg-gray-600 rounded-2xl">
                                 <div>{team.TeamName}</div>
-                                {Array.from({ length: team.MemberCount || 0 }).map((x, i) => (
-                                    <span key={i}><User /></span>
-                                ))}
-                                <div>{team.MemberCount + "Members" || team.MemberCount === 1 ? "1 Member" : "0 Members"}</div>
+                                <div><User/>{team.MemberCount + "Members" || team.MemberCount === 1 ? "1 Member" : "0 Members"}</div>
                                 <div>{team.SupervisorFirstname} {team.SupervisorLastname}</div>
                                 <button onClick={() => router.push(`/dashboard/teams/${team.TeamID}`)}>View Team</button>
                             </div>

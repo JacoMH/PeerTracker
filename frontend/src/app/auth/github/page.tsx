@@ -1,17 +1,29 @@
 "use client";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useParams } from 'next/navigation'
 import { useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from "next/navigation";
 
 export default function github() {
-    const params = useSearchParams()
+    const SearchParams = useSearchParams()
     const router = useRouter();
 
-    console.log("parameters", params.values());
+    console.log("parameters", SearchParams.values());
 
-    const state = params.get("state");
-    const code = params.get("code");
+    const stateParam = SearchParams.get("state");
+    console.log("state param", stateParam);
+
+    if (stateParam === null || stateParam.length < 1) {
+        console.log("State param is empty");
+    }
+    
+    const state = stateParam?.split(' ')[0];
+    const TeamID = stateParam?.split(' ')[1];
+
+    console.log("state param", state);
+    console.log("Team ID", TeamID);
+
+    const code = SearchParams.get("code");
 
     const fetchGithubToken = async () => {
 
@@ -23,7 +35,7 @@ export default function github() {
 
         // server side to recieve access_token and also store in db
         if (state === sessionStorage.getItem("latestCSRFToken")) {
-            const res = await fetch("/api/github", {
+            const res = await fetch("/api/auth/github/connectgithub", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,8 +56,8 @@ export default function github() {
 
             console.log("response:", response);
 
-            //need a way to redirect back to the page and refresh it too
-            router.back();
+            //redirects back using teamID
+            router.push(`/dashboard/teams/${TeamID}`);
             return response.data;
         }
     }
