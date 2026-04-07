@@ -123,7 +123,7 @@ export default function StudentMenu() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer: ${access_token}`
+                'authorization': `Bearer ${access_token}`
             },
             body: JSON.stringify({
                 newStatus: newStatus,

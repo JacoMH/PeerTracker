@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase";
 import ConnectGithub from "@/app/sharedComponents/ConnectGithub";
 
 // Student Modules
+import ChooseGithubRepo from '@/app/dashboard/components/dashboard/chooseGithubRepo'
 
 // Supervisor Modules
 
@@ -39,6 +40,10 @@ export default function DashboardPage() {
         checkgithubintegration();
     }, [])
 
+    function handleGithubRepoResponse(response: boolean) {
+        setToggleGithubRepo(response);
+    }
+
     useEffect(() => {
         if (toggleGithubIntegration === true) {
             // fetch if there is a github repo already assigned to the team
@@ -52,7 +57,7 @@ export default function DashboardPage() {
                     {/*Dashboard for student*/}
                     {/* connect your Github window*/}
                     {!toggleGithubIntegration ? (
-                        <ConnectGithub RedirectTeamID={TeamID} /> // Pass TeamID to connectgithub to help with redirect https://www.youtube.com/watch?v=s6DGVtkX9R0
+                        <ConnectGithub TeamID={TeamID} /> // Pass TeamID to connectgithub to help with redirect https://www.youtube.com/watch?v=s6DGVtkX9R0
                     ) : (
                         <div>
                             {
@@ -65,6 +70,7 @@ export default function DashboardPage() {
                                     <div>
                                         {/* link here to module that allows user to select github repo for the team */}
                                         no github repo
+                                        <ChooseGithubRepo TeamID={TeamID} response={handleGithubRepoResponse}/>
                                     </div>
                                 )
                             }
@@ -79,7 +85,7 @@ export default function DashboardPage() {
                     {/*Dashboard for supervisor*/}
                     {/* Connect your github window */}
                     {!toggleGithubIntegration ? (
-                        <ConnectGithub RedirectTeamID={TeamID} />
+                        <ConnectGithub TeamID={TeamID} />
                     ) : (
                         <div>
                             {
@@ -89,12 +95,11 @@ export default function DashboardPage() {
                                     </div>
                                 ) : (
                                     <div>
-                                        {/* supervisor modules here */}
+                                        {/* supervisor modules here, put teamid in for correct data */}
                                         no github repo for modules
                                     </div>
                                 )
                             }
-                            {/* put teamID into all the modules to get the right data */}
                         </div>
                     )
                     }

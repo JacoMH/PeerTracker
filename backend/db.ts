@@ -38,7 +38,6 @@ export const githubrepos = pgTable("githubrepos", {
     TeamID: uuid("TeamID").notNull().references(() => teams.TeamID, { onDelete: "cascade" }),
     RepoName: varchar("RepoName").notNull(),
     RepoUrl: varchar("RepoUrl").notNull(),
-    has_webhook: boolean("has_webhook").notNull().default(false),
 })
 
 export const githubcommits = pgTable("githubcommits", {

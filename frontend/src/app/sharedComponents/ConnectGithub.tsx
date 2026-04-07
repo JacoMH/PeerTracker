@@ -1,7 +1,7 @@
 "use client";
 
 interface Team {
-    RedirectTeamID: String;
+    TeamID: String;
 }
 // https://medium.com/@tony.infisical/guide-to-using-oauth-2-0-to-access-github-api-818383862591 used this tutorial to help setup connection
 export default function ConnectGithub(Team: Team) {
@@ -24,7 +24,7 @@ export default function ConnectGithub(Team: Team) {
 
         //redirect user to github which if successful then redirects back to /auth/github
         // Use the state to keep teamid throughout the link https://github.com/orgs/community/discussions/61238
-        const link=`https://github.com/login/oauth/authorize?client_id=${clientID}&response_type=code&scope=repo&redirect_uri=${redirect_uri}&state=${state}+${Team.RedirectTeamID}`
+        const link=`https://github.com/login/oauth/authorize?client_id=${clientID}&response_type=code&scope=repo&redirect_uri=${redirect_uri}&state=${state}+${Team.TeamID}`
 
         window.location.assign(link);
     }

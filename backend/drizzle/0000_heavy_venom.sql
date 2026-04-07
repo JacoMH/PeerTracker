@@ -22,8 +22,7 @@ CREATE TABLE "githubrepos" (
 	"RepoID" varchar PRIMARY KEY NOT NULL,
 	"TeamID" uuid NOT NULL,
 	"RepoName" varchar NOT NULL,
-	"RepoUrl" varchar NOT NULL,
-	"has_webhook" boolean DEFAULT false NOT NULL
+	"RepoUrl" varchar NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "invites" (

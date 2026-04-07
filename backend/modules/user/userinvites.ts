@@ -7,14 +7,16 @@ import { User } from '../../interface/User.ts';
 
 async function getUserIdFromRequest(req: Request<User>): Promise<string | null> {
     const access_token = req.headers.authorization?.slice(7); // access_token
-
+    console.log("authorization: ", access_token);
     // Fetch user ID using access token which also validates the token
     const userResponse = await supabaseClient.auth.getUser(access_token);
-
+    console.log("user Response: ", userResponse);
     if (userResponse.error || !userResponse.data.user) {
         console.error("Error fetching user from Supabase:", userResponse.error);
         return null;
     }
+
+    console.log("user response: ", userResponse.data.user.id);
     return userResponse.data.user.id;
 }
 
@@ -22,6 +24,7 @@ async function getUserIdFromRequest(req: Request<User>): Promise<string | null> 
 export async function fetchuserinvites(req: Request<User>, res: Response) {
     try {
         const userId = await getUserIdFromRequest(req);
+
         if (!userId) {
             return res.status(500).json({ message: "Failed to fetch Id" });
         }
@@ -66,13 +69,12 @@ export async function fetchuserinvites(req: Request<User>, res: Response) {
 
 export async function updateinvites(req: Request<User>, res: Response) {
     try {
+        console.log(req);
         const userId = await getUserIdFromRequest(req);
-
         //find out which button was pressed via new status being "accepted" or "denied"
         const newStatus = req.body.newStatus;
         const InviteID = req.body.InviteID;
         console.log("newStatus:", newStatus, "InviteID:", InviteID);
-
         if (!userId) {
             return res.status(500).json({ message: "Failed to fetch Id" });
         }

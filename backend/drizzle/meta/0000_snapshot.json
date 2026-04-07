@@ -1,5 +1,5 @@
 {
-  "id": "092d6ed6-c249-4da6-b6a6-2fc56278beba",
+  "id": "9297d4f8-47fa-415b-acb2-4cb1b3de427a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -170,13 +170,6 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "has_webhook": {
-          "name": "has_webhook",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
         }
       },
       "indexes": {},
