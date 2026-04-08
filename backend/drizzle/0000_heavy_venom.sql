@@ -15,7 +15,7 @@ CREATE TABLE "githubcommits" (
 	"name" varchar NOT NULL,
 	"CommitUrl" varchar NOT NULL,
 	"description" varchar,
-	"date_created" timestamp DEFAULT now() NOT NULL
+	"date_created" TIMESTAMPTZ NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "githubrepos" (

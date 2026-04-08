@@ -14,6 +14,7 @@ import githubConnect from 'modules/user/githubconnect.ts';
 import verifygithub from 'modules/github/verifygithub.ts';
 import fetchgithubrepo from 'modules/github/fetchgithubrepo.ts'
 import linkgithubrepo from 'modules/github/linkgithubrepo.ts'
+import updateDatabase from 'modules/github/updateDatabase.ts';
 
 // Routes
 
@@ -39,4 +40,5 @@ router.post('/updateinvites', updateinvites);
 router.get('/verifygithub', verifygithub);
 router.get('/fetchgithubrepo', fetchgithubrepo);
 router.get('/linkgithubrepo', linkgithubrepo);
+router.get('/updateDatabase', updateDatabase);
 export default router;

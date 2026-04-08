@@ -48,7 +48,7 @@ export const githubcommits = pgTable("githubcommits", {
     name: varchar("name").notNull(),
     CommitUrl: varchar("CommitUrl").notNull(),
     description: varchar("description"),
-    date_created: timestamp("date_created").notNull().defaultNow(),
+    date_created: timestamp("date_created", {withTimezone:true, mode: 'date'}).notNull()
 })
 
 export const trello_integrations = pgTable("trello_integrations", {
