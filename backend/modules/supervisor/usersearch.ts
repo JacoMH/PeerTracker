@@ -39,7 +39,7 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
             )
             .execute();
 
-        console.log("Supervisor Teams:", searchUser);
+       // console.log("Supervisor Teams:", searchUser);
         return res.status(200).json({ message: "Search Results", data: searchUser });
     }
     catch (error) {

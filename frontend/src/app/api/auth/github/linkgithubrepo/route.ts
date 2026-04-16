@@ -12,9 +12,10 @@ export async function GET(req: NextRequest) {
         const params = req.nextUrl.searchParams;
         const TeamID = params.get("TeamID");
         const url = params.get("url");
-        console.log("TeamID", TeamID, "url", url);
+        const currentRepo = params.get("currentRepo");
+        console.log("TeamID", TeamID, "url", url, "currentrepo:", currentRepo);
 
-        const response = await fetch(`${process.env.API_URL}/router/linkgithubrepo?TeamID=${TeamID}&url=${url}`, {
+        const response = await fetch(`${process.env.API_URL}/router/linkgithubrepo?TeamID=${TeamID}&url=${url}&currentRepo=${currentRepo}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

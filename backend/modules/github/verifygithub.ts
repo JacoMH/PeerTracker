@@ -7,7 +7,7 @@ export default async function createuser(req: Request, res: Response) {
     try {
         const access_token = req.headers.authorization?.slice(7); //Slices off Bearer leaving only the access_token https://stackoverflow.com/questions/44497550/how-to-retrieve-a-bearer-token-from-an-authorization-header-in-javascript-angul
 
-        console.log("headers: ", req.headers);
+     //   console.log("headers: ", req.headers);
         //verify supabase
         const userResponse = await supabaseClient.auth.getUser(access_token);
 
@@ -30,7 +30,7 @@ export default async function createuser(req: Request, res: Response) {
             .execute();
 
 
-        console.log("githubaccount: ", githubAccount);
+    //    console.log("githubaccount: ", githubAccount);
         if (githubAccount.length > 0) {
             return res.status(200).json({ message: "Successful verification", data: githubAccount });
         }

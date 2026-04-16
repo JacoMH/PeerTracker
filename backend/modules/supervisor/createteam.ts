@@ -43,7 +43,7 @@ export default async function fetchuserteams(req: Request, res: Response) {
         })
            
 
-        console.log("Supervisor Invites:", sendInvites, "Supervisor Teams:", createTeam);
+      //  console.log("Supervisor Invites:", sendInvites, "Supervisor Teams:", createTeam);
         return res.status(201).json({ message: "Invites sent and team created"});
     }
     catch (error) {

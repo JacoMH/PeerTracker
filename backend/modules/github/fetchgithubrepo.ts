@@ -12,6 +12,8 @@ export default async function fetchgithubrepo(req: Request, res: Response) {
         const TeamID = req.query.TeamID as String;
         // check db for github repo related to the team
 
+        console.log("TeamID", TeamID);
+
         const result = await db.select({
             RepoID: githubrepos.RepoID,
             RepoName: githubrepos.RepoName,
@@ -20,6 +22,7 @@ export default async function fetchgithubrepo(req: Request, res: Response) {
             .where(eq(githubrepos.TeamID, TeamID?.toString()))
             .execute();
 
+       // console.log("result of github repos: ", result);
         if (result.length > 0 ) {
             return res.status(200).json({ message: "Github Repos Exist", data: result });
         }

@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { db, supabaseClient } from '../../index.ts'
 import { github_integrations, githubrepos } from 'db.ts';
 import { eq } from 'drizzle-orm';
+import creategithubwebhook from 'modules/webhook/creategithubwebhook.ts';
+import deletegithubwebhook from 'modules/webhook/deletegithubwebhook.ts';
+
 
 export default async function linkgithubrepo(req: Request, res: Response) {
     try {
@@ -14,16 +17,23 @@ export default async function linkgithubrepo(req: Request, res: Response) {
 
         const userId = userResponse.data.user.id;
         const query = req.query;
+        const currentRepoID = query.currentRepo as string
+
+        console.log("currentRepoID", currentRepoID);
+        console.log("query", query.currentRepo);
 
         const TeamID = query.TeamID as string;
         const url = query.url as string;
 
+        //check they own the repo or have perms
+
         //split url for fetch
-        console.log("url: ", url);
+        //   console.log("url: ", url);
         const splitUrl = url.split('/');
-        console.log("split url:", splitUrl);
+        //   console.log("split url:", splitUrl);
         const owner = splitUrl[3];
         const repo = splitUrl[4];
+
 
         //fetch github access token
         const githubAccount = await db.select(
@@ -52,12 +62,17 @@ export default async function linkgithubrepo(req: Request, res: Response) {
 
         if (!getRepo.ok) {
             console.log("failed to fetch repo");
+            return res.status(500).json({ message: "Failed to fetch repo" })
+        }
+        else {
+            //after checking if they own the repo and if its possible to add or not, remove the current one if it is, starting with unlinking the webhook
+            await deletegithubwebhook(currentRepoID, githubaccesstoken ?? "")
         }
 
         const parsedRepoData = await getRepo.json();
-        //if getrepo is success, store info in db alongside TeamID
-        console.log("getRepo Info::::: ", parsedRepoData);
 
+  
+        //if getrepo is success, store info in db alongside TeamID
 
         //store info in drizzle db
         type newRepo = typeof githubrepos.$inferInsert;
@@ -77,8 +92,9 @@ export default async function linkgithubrepo(req: Request, res: Response) {
             return res.status(500).json({ message: "Failed to store repo" });
         }
 
-        return res.status(200).json({ message: "Repo Stored" });
+        await creategithubwebhook(owner, repo, parsedRepoData.id, githubaccesstoken)
 
+        return res.status(200).json({ message: "Repo Stored" });
     }
     catch (error) {
         console.log("error:", error);

@@ -10,7 +10,7 @@ export default async function createuser(req: Request<User>, res: Response) {
         // Create user in database with other information
         console.log('Creating user with data:', req.body);
         
-        type NewUser = typeof users.$inferInsert;
+        type NewUser = typeof users.$inferInsert; //https://orm.drizzle.team/docs/insert
         const insertUser = async (user: NewUser) => {
             return db.insert(users).values(user);
         }

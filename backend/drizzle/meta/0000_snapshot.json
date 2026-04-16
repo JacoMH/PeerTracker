@@ -1,9 +1,327 @@
 {
-  "id": "9297d4f8-47fa-415b-acb2-4cb1b3de427a",
+  "id": "af1c3a2b-57e5-4f9f-87ac-ead0d4f610a0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.AssignedCard": {
+      "name": "AssignedCard",
+      "schema": "",
+      "columns": {
+        "AssignedID": {
+          "name": "AssignedID",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "CardID": {
+          "name": "CardID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "AccountID": {
+          "name": "AccountID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "AssignedCard_CardID_TrelloCard_CardID_fk": {
+          "name": "AssignedCard_CardID_TrelloCard_CardID_fk",
+          "tableFrom": "AssignedCard",
+          "tableTo": "TrelloCard",
+          "columnsFrom": [
+            "CardID"
+          ],
+          "columnsTo": [
+            "CardID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TrelloAction": {
+      "name": "TrelloAction",
+      "schema": "",
+      "columns": {
+        "ActionID": {
+          "name": "ActionID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "BoardID": {
+          "name": "BoardID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CardID": {
+          "name": "CardID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AccountID": {
+          "name": "AccountID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "oldData": {
+          "name": "oldData",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_created": {
+          "name": "date_created",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TrelloAction_BoardID_TrelloBoard_BoardID_fk": {
+          "name": "TrelloAction_BoardID_TrelloBoard_BoardID_fk",
+          "tableFrom": "TrelloAction",
+          "tableTo": "TrelloBoard",
+          "columnsFrom": [
+            "BoardID"
+          ],
+          "columnsTo": [
+            "BoardID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "TrelloAction_CardID_TrelloCard_CardID_fk": {
+          "name": "TrelloAction_CardID_TrelloCard_CardID_fk",
+          "tableFrom": "TrelloAction",
+          "tableTo": "TrelloCard",
+          "columnsFrom": [
+            "CardID"
+          ],
+          "columnsTo": [
+            "CardID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TrelloBoard": {
+      "name": "TrelloBoard",
+      "schema": "",
+      "columns": {
+        "BoardID": {
+          "name": "BoardID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "TeamID": {
+          "name": "TeamID",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "BoardName": {
+          "name": "BoardName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "BoardUrl": {
+          "name": "BoardUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Webhook": {
+          "name": "Webhook",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TrelloBoard_TeamID_teams_TeamID_fk": {
+          "name": "TrelloBoard_TeamID_teams_TeamID_fk",
+          "tableFrom": "TrelloBoard",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "TeamID"
+          ],
+          "columnsTo": [
+            "TeamID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TrelloCard": {
+      "name": "TrelloCard",
+      "schema": "",
+      "columns": {
+        "CardID": {
+          "name": "CardID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "BoardID": {
+          "name": "BoardID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ListID": {
+          "name": "ListID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dueComplete": {
+          "name": "dueComplete",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dueDate": {
+          "name": "dueDate",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TrelloCard_BoardID_TrelloBoard_BoardID_fk": {
+          "name": "TrelloCard_BoardID_TrelloBoard_BoardID_fk",
+          "tableFrom": "TrelloCard",
+          "tableTo": "TrelloBoard",
+          "columnsFrom": [
+            "BoardID"
+          ],
+          "columnsTo": [
+            "BoardID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "TrelloCard_ListID_TrelloList_ListID_fk": {
+          "name": "TrelloCard_ListID_TrelloList_ListID_fk",
+          "tableFrom": "TrelloCard",
+          "tableTo": "TrelloList",
+          "columnsFrom": [
+            "ListID"
+          ],
+          "columnsTo": [
+            "ListID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.TrelloList": {
+      "name": "TrelloList",
+      "schema": "",
+      "columns": {
+        "ListID": {
+          "name": "ListID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "BoardID": {
+          "name": "BoardID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "closed": {
+          "name": "closed",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TrelloList_BoardID_TrelloBoard_BoardID_fk": {
+          "name": "TrelloList_BoardID_TrelloBoard_BoardID_fk",
+          "tableFrom": "TrelloList",
+          "tableTo": "TrelloBoard",
+          "columnsFrom": [
+            "BoardID"
+          ],
+          "columnsTo": [
+            "BoardID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.github_integrations": {
       "name": "github_integrations",
       "schema": "",
@@ -115,10 +433,9 @@
         },
         "date_created": {
           "name": "date_created",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         }
       },
       "indexes": {},
@@ -170,6 +487,12 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "Webhook": {
+          "name": "Webhook",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -221,7 +544,7 @@
           "name": "SupervisorID",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",
@@ -329,12 +652,6 @@
         },
         "access_token": {
           "name": "access_token",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "refresh_token": {
-          "name": "refresh_token",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
