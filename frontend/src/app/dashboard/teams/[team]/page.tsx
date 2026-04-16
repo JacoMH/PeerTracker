@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 
 // Modules
 import ConnectGithub from "@/app/sharedComponents/ConnectGithub";
+import DisplayApps from "@/app/dashboard/components/dashboard/DisplayApps"
 
 // Student Modules
 import ChooseGithubRepo from '@/app/dashboard/components/dashboard/chooseGithubRepo'
@@ -65,6 +66,7 @@ export default function DashboardPage() {
                                     <div>
                                         {/* all the main stuff goes here, put teamID into all the modules to get the right data */}
                                         github repo exists
+                                        <DisplayApps TeamID={TeamID} />
                                     </div>
                                 ) : (
                                     <div>
