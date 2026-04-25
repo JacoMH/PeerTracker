@@ -7,6 +7,7 @@ export const users = pgTable("users", {
     LastName: varchar("LastName").notNull(),
     Email: varchar("Email").notNull().unique(),
     createdAt: timestamp("createdAt").notNull().defaultNow(),
+    GDPR_Agreement: boolean("GDPR_Agreement").default(false)
 })
 
 export const teams = pgTable("teams", {
@@ -27,7 +28,6 @@ export const github_integrations = pgTable("github_integrations", {
     AccountID: varchar("AccountID").primaryKey().notNull(),
     UserID: uuid("UserID").notNull().references(() => users.UserID, { onDelete: "cascade" }),
     access_token: varchar("access_token").notNull(),
-    refresh_token: varchar("refresh_token").notNull(),
     accountName: varchar("accountName").notNull(),
     url: varchar("url").notNull(),
 
@@ -38,15 +38,14 @@ export const githubrepos = pgTable("githubrepos", {
     TeamID: uuid("TeamID").notNull().references(() => teams.TeamID, { onDelete: "cascade" }),
     RepoName: varchar("RepoName").notNull(),
     RepoUrl: varchar("RepoUrl").notNull(),
-    Webhook: varchar("Webhook")
+    Webhook: varchar("Webhook"),
+    access_token: varchar("access_token")
 })
 
 export const githubcommits = pgTable("githubcommits", {
     CommitID: varchar("CommitID").primaryKey().notNull(),
     RepoID: varchar("RepoID").notNull().references(() => githubrepos.RepoID, { onDelete: "cascade" }),
     AccountID: varchar("AccountID").notNull(),
-    section: varchar("section"),
-    name: varchar("name").notNull(),
     CommitUrl: varchar("CommitUrl").notNull(),
     description: varchar("description"),
     date_created: timestamp("date_created", { withTimezone: true, mode: 'date' }).notNull()
@@ -65,7 +64,8 @@ export const TrelloBoard = pgTable("TrelloBoard", {
     TeamID: uuid("TeamID").notNull().references(() => teams.TeamID, { onDelete: "cascade" }),
     BoardName: varchar("BoardName").notNull(),
     BoardUrl: varchar("BoardUrl").notNull(),
-    Webhook: varchar("Webhook")
+    Webhook: varchar("Webhook"),
+    access_token: varchar("access_token")
 })
 
 export const TrelloAction = pgTable("TrelloAction", {
@@ -99,6 +99,15 @@ export const AssignedCard = pgTable("AssignedCard", {
     AssignedID: uuid("AssignedID").primaryKey().defaultRandom().notNull(),
     CardID: varchar("CardID").notNull().references(() => TrelloCard.CardID, { onDelete: "cascade" }),
     AccountID: varchar("AccountID").notNull(),
+})
+
+export const Notification = pgTable("Notification", {
+    ReportID: uuid("ReportID").primaryKey().defaultRandom().notNull(),
+    UserID: uuid("UserID").references(() => users.UserID, { onDelete: "cascade" }),
+    ReportedUserID: uuid("ReportedUserID").notNull().references(() => users.UserID, { onDelete: "cascade" }),
+    TeamID: uuid("TeamID").notNull().references(() => teams.TeamID, { onDelete: "cascade" }),
+    Description: varchar("Description").notNull(),
+    Type: varchar("Type").notNull()
 })
 
 

@@ -30,12 +30,13 @@ export default async function engagement(req: Request, res: Response) {
         console.log("repoID:", RepoID, "BoardID", BoardID);
 
         //for trello
-        const trelloActionWeek = sql`DATE_TRUNC('week', ${TrelloAction.date_created})`
+        const trelloActionWeek = sql`DATE_TRUNC('week', ${TrelloAction.date_created})` //https://github.com/drizzle-team/drizzle-orm/discussions/2893 helped
 
         const trelloQuery = await db.select({
             TeamID: TrelloBoard.TeamID,
             date: trelloActionWeek.mapWith(String).as("date"),
-            TrelloAction: sql`COUNT(${TrelloAction.ActionID})`
+         //   TrelloAction: sql`COUNT(${TrelloAction.ActionID})`,
+            TrelloAction: count(TrelloAction.ActionID) 
         })
             .from(TrelloBoard)
             .innerJoin(teams, eq(teams.TeamID, TrelloBoard.TeamID))
@@ -54,7 +55,8 @@ export default async function engagement(req: Request, res: Response) {
         const githubQuery = await db.select({
             TeamID: githubrepos.TeamID,
             date: githubCommitsWeek.mapWith(String).as("date"),
-            CommitCount: sql`COUNT(${githubcommits.CommitID})`
+         //   CommitCount: sql`COUNT(${githubcommits.CommitID})`, //switch to the other one
+            CommitCount: count(githubcommits.CommitID),
         })
             .from(githubrepos)
             .innerJoin(teams, eq(teams.TeamID, githubrepos.TeamID))

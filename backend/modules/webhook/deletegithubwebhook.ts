@@ -10,13 +10,13 @@ export default async function deletegithubwebhook(currentRepoID: string, githuba
     try {
         //fetch rest of info
         const fetchRepoInfo = await db.select()
-        .from(githubrepos)
-        .where(eq(githubrepos.RepoID, currentRepoID))
+            .from(githubrepos)
+            .where(eq(githubrepos.RepoID, currentRepoID))
 
         const githubRepo = fetchRepoInfo[0].RepoName
         const githubUrl = fetchRepoInfo[0].RepoUrl.split("/")
 
-         const owner = githubUrl[3];
+        const owner = githubUrl[3];
 
         console.log("repoid: ", currentRepoID, "githubaccesstoken: ", githubaccesstoken, "owner: ", owner);
         //fetch github webhook
@@ -26,27 +26,30 @@ export default async function deletegithubwebhook(currentRepoID: string, githuba
 
         console.log("fetchwebhook: ", fetchWebhook[0].Webhook);
         const webhookID = fetchWebhook[0].Webhook;
+        const github_accesstoken = fetchWebhook[0].access_token;
 
-        //webhook link for the repo
-        const deleteInfo = await fetch(`https://api.github.com/repos/${owner}/${githubRepo}/hooks/${webhookID}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${githubaccesstoken}`,
-                'X-GitHub-Api-Version': '2026-03-10'
+        if (webhookID) {
+            //webhook link for the repo
+            const deleteInfo = await fetch(`https://api.github.com/repos/${owner}/${githubRepo}/hooks/${webhookID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${github_accesstoken}`,
+                    'X-GitHub-Api-Version': '2026-03-10'
+                }
+            })
+
+            if (!deleteInfo.ok) {
+                console.log("Failed to delete webhook connection");
             }
-        })
-
-       // console.log("response: ", deleteInfo);
-
-        if (deleteInfo.ok) {
-            const deleteRepo = await db.delete(githubrepos)
-                .where(eq(githubrepos.RepoID, currentRepoID));
-        }
-        else {
-            console.log("DeleteInfo : ", deleteInfo);
         }
 
+        //delete repo from db
+        console.log("repoid: ", currentRepoID);
+        const deleteRepo = await db.delete(githubrepos)
+            .where(eq(githubrepos.RepoID, currentRepoID));
+
+        console.log("successful deletion");
     }
     catch (error) {
         console.log("Error deleting github webhook:", error);

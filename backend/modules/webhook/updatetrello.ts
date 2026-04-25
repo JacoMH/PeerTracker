@@ -2,7 +2,7 @@ import { db, supabaseClient } from '../../index.ts'
 import { Request, Response } from 'express';
 import { eq, and } from 'drizzle-orm'
 
-import { AssignedCard, github_integrations, trello_integrations, TrelloAction, TrelloBoard, TrelloCard, TrelloList } from 'db.ts';
+import { AssignedCard, TrelloAction, TrelloCard, TrelloList } from 'db.ts';
 
 export default async function updatetrello(req: Request) {
     try {

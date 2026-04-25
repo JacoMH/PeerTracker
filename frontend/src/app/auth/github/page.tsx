@@ -16,7 +16,7 @@ export default function github() {
     if (stateParam === null || stateParam.length < 1) {
         console.log("State param is empty");
     }
-    
+
     const state = stateParam?.split(' ')[0];
     const TeamID = stateParam?.split(' ')[1];
 
@@ -66,7 +66,7 @@ export default function github() {
         fetchGithubToken();
     }, [])
     return (
-        <div>
+        <div className='flex items-center justify-center rounded-4xl text-black p-10'>
             Authorizing connection...
         </div>
     )

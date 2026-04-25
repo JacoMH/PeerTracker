@@ -20,8 +20,6 @@ export default async function updategithub(req: Request) {
                             CommitID: item.id,
                             RepoID: req.body.repository.id,
                             AccountID: githubid,
-                            section: "empty",
-                            name: "empty",
                             CommitUrl: item.url,
                             description: item.message,
                             date_created: new Date(item.timestamp)

@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
 
         if (!response.ok) {
             console.log("Error response from backend:", response.status, response.statusText);
+            return NextResponse.json({ error: "Error fetching actions per user" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);

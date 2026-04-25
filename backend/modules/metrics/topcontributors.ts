@@ -26,7 +26,7 @@ export default async function engagement(req: Request, res: Response) {
                 AccountID: githubcommits.AccountID,
                 GithubUsername: github_integrations.accountName,
                 RepoID: githubrepos.RepoID,
-                CommitCount: count().as("CommitCount")
+                CommitCount: count(githubcommits.CommitID).as("CommitCount")
             })
                 .from(githubcommits)
                 .innerJoin(github_integrations, eq(github_integrations.AccountID, githubcommits.AccountID))
@@ -39,7 +39,7 @@ export default async function engagement(req: Request, res: Response) {
                 AccountID: TrelloAction.AccountID,
                 TrelloUsername: trello_integrations.accountName,
                 BoardID: TrelloBoard.BoardID,
-                ActionCount: count().as("ActionCount")
+                ActionCount: count(TrelloAction.ActionID).as("ActionCount")
             })
                 .from(TrelloAction)
                 .innerJoin(trello_integrations, eq(trello_integrations.AccountID, TrelloAction.AccountID))
@@ -79,10 +79,12 @@ export default async function engagement(req: Request, res: Response) {
                 .groupBy(users.UserID, users.FirstName, users.LastName, countGithubQuery.CommitCount, TrelloBoard.BoardID, githubrepos.RepoID, countTrelloQuery.ActionCount, countGithubQuery.GithubUsername, countTrelloQuery.TrelloUsername)
                 .limit(5)
 
+
+
             return res.status(200).json({ message: "returning data for top contributors", data: fetchTopContributors })
         }
 
-        return res.status(200).json({ message: "TeamID doesnt exist"})
+        return res.status(200).json({ message: "TeamID doesnt exist" })
 
     }
     catch (error) {

@@ -35,6 +35,18 @@ export default async function linkgithubrepo(req: Request, res: Response) {
         const repo = splitUrl[4];
 
 
+        //check if the repo being linked is one owned by the user linking it
+        const fetchgithubusername = await db.select()
+            .from(github_integrations)
+            .where(eq(github_integrations.UserID, userId))
+            .execute();
+
+        const githubusername = fetchgithubusername[0].accountName;
+
+        if (githubusername !== owner) {
+            return res.status(200).json({ message: "Linked Repo is not owned by the user, cannot be added" });
+        }
+
         //fetch github access token
         const githubAccount = await db.select(
             {
@@ -56,7 +68,7 @@ export default async function linkgithubrepo(req: Request, res: Response) {
                 "Accept": "application/json",
                 "Accept-Encoding": "application/json",
                 'X-GitHub-Api-Version': '2026-03-10',
-                "application": `Bearer ${githubaccesstoken}`
+                "Authorization": `Bearer ${githubaccesstoken}`
             }
         })
 
@@ -64,15 +76,18 @@ export default async function linkgithubrepo(req: Request, res: Response) {
             console.log("failed to fetch repo");
             return res.status(500).json({ message: "Failed to fetch repo" })
         }
-        else {
-            //after checking if they own the repo and if its possible to add or not, remove the current one if it is, starting with unlinking the webhook
-            await deletegithubwebhook(currentRepoID, githubaccesstoken ?? "")
-        }
+        //check ownership, public repos will make it through so have to use a field to determine access
 
         const parsedRepoData = await getRepo.json();
+        console.log("parsed repo data: ", parsedRepoData);
 
-  
-        //if getrepo is success, store info in db alongside TeamID
+        if (parsedRepoData.private === false) {
+            return res.status(500).json({ message: "Private Repos Only" })
+        }
+
+        if (currentRepoID) {
+            await deletegithubwebhook(currentRepoID, githubaccesstoken ?? "")
+        }
 
         //store info in drizzle db
         type newRepo = typeof githubrepos.$inferInsert;
@@ -81,7 +96,8 @@ export default async function linkgithubrepo(req: Request, res: Response) {
             RepoID: parsedRepoData.id,
             TeamID: TeamID,
             RepoName: parsedRepoData.name,
-            RepoUrl: url
+            RepoUrl: url,
+            access_token: githubaccesstoken
         };
         const storeRepo = await db.insert(githubrepos)
             .values(insertrepo)

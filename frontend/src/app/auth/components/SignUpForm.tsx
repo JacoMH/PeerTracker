@@ -28,36 +28,43 @@ export default function SignUpForm() {
 
     return (
         (!enableLoginRedirect) ? (
-            <form onSubmit={(e) => { e.preventDefault(); signUpAPI() }}>
-                <span className='text-3xl font-bold mb-6 flex justify-around'>Sign Up</span>
-                <div className='flex flex-col gap-4'>
+            <form onSubmit={(e) => { e.preventDefault(); signUpAPI() }} className='flex flex-col w-full justify-center'>
+                <span className='text-3xl font-bold mb-1 flex justify-around'>Sign Up</span>
+                <div className='flex flex-col gap-3 max-w-100 w-full justify-center self-center'>
                     <label htmlFor="Role" className="block text-sm font-medium text-gray-700">Role</label>
-                    <select id='Role' name='Role' className='border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500' value={role} onChange={(e) => setRole(e.target.value)}>
+                    <select id='Role' name='Role' className="p-2 bg-gray-400 rounded-2xl text-white flex justify-center" value={role} onChange={(e) => setRole(e.target.value)}>
                         <option value='Student'>Student</option>
                         <option value='Supervisor'>Supervisor</option>
                     </select>
                     <label htmlFor="FirstName" className="block text-sm font-medium text-gray-700">First Name</label>
-                    <input type="text" id="FirstName" name="FirstName" className="" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                    <input type="text" id="FirstName" name="FirstName" className="p-2 bg-gray-400 rounded-2xl text-white flex justify-center" placeholder="Enter First Name..."
+                        value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                     <label htmlFor="LastName" className="block text-sm font-medium text-gray-700">Last Name</label>
-                    <input type="text" id="LastName" name="LastName" className="" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                    <input type="text" id="LastName" name="LastName" className="p-2 bg-gray-400 rounded-2xl text-white flex justify-center" placeholder="Enter Last Name..."
+                        value={lastName} onChange={(e) => setLastName(e.target.value)} />
                     <label htmlFor='email' className='block text-sm font-medium text-gray-700'>Email</label>
-                    <input type='email' id='email' name='email' className='' value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input type='email' id='email' name='email' className="p-2 bg-gray-400 rounded-2xl text-white flex justify-center" placeholder="Enter email..."
+                        value={email} onChange={(e) => setEmail(e.target.value)} />
                     <label htmlFor='password' className='block text-sm font-medium text-gray-700'>Password</label>
-                    <input type='password' id='password' name='password' className='' value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type='password' id='password' name='password' className="p-2 bg-gray-400 rounded-2xl text-white flex justify-center" placeholder="Enter Password..."
+                        value={password} onChange={(e) => setPassword(e.target.value)} />
                     <label htmlFor='confirmPassword' className='block text-sm font-medium text-gray-700'>Confirm Password</label>
-                    <input type='password' id='confirmPassword' name='confirmPassword' className='' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                    <input type='password' id='confirmPassword' name='confirmPassword' className="p-2 bg-gray-400 rounded-2xl text-white flex justify-center" placeholder="Confirm Password..."
+                        value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                     <span className='text-red-500 text-sm text-center'>{error}</span>
-                    <button type='submit' className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 hover:cursor-pointer'>Sign Up</button>
+                    <button type='submit' className="flex place-self-center w-full justify-center max-w-30 p-3 mt-3 rounded-2xl bg-gray-600 text-white text-center hover:cursor-pointer hover:bg-gray-200 hover:text-black">
+                        Sign Up</button>
                     <div className=' flex justify-center items-center mt-4'>
                         <span className='text-sm text-gray-700'>Already have an account?</span>
-                        <button onClick={() => router.push('/auth/login')} className='text-blue-500 hover:underline hover:cursor-pointer ml-1 text-sm'>Login</button>
+                        <button type='button' onClick={() => router.push('/auth/login')} className='text-black hover:underline hover:cursor-pointer ml-1 text-sm'>Login</button>
                     </div>
                 </div>
             </form>
         ) : (
             <div className='flex flex-col gap-6 items-center'>
                 <span className='text-3xl font-bold mb-6 flex justify-around'>Signup Successful</span>
-                <button onClick={() => router.push('/auth/login')} className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 hover:cursor-pointer'>Go to Login</button>
+                <button onClick={() => router.push('/auth/login')} className="flex place-self-center w-full justify-center max-w-30 p-3 mt-3 rounded-2xl bg-gray-600 text-white text-center hover:cursor-pointer hover:bg-gray-200 hover:text-black">
+                    Go to Login</button>
             </div>
         )
     )
@@ -78,10 +85,11 @@ export default function SignUpForm() {
                 //fetch user id from auth user
                 let userId = data.user?.id || ''
 
-                let access_token = data.session?.access_token; 
+                let access_token = data.session?.access_token;
+                console.log("helloasodijaos")
 
                 // Store role from backend with user id from auth user in http cookie
-                const res = await fetch("/api/auth/createuser", {
+                const res = await fetch("/api/account/createuser", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -100,9 +108,10 @@ export default function SignUpForm() {
                 if (!res.ok) {
                     return setError("Error creating user in database")
                 }
+                console.log("helloasodijaosijdaoisjdoiajsoidjasiojdaiosjdoiajskvmsko")
 
                 const response = await res.json();
-
+                console.log("hello redirect here")
                 // enables login redirect module if account creation is successful
                 setEnableLoginRedirect(true);
             }

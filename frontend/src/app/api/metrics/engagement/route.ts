@@ -25,11 +25,12 @@ export async function GET(req: NextRequest) {
 
         if (!response.ok) {
             console.log("Error response from backend:", response.status, response.statusText);
+            return NextResponse.json({ error: "Error fetching engagement metrics" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch (error) {
-        return NextResponse.json({ error: "failed to fetch team info" }, { status: 500 });
+        return NextResponse.json({ error: "failed to fetch engagement metrics" }, { status: 500 });
     }
 }

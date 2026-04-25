@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
         const params = req.nextUrl.searchParams;
         const TeamID = params.get("TeamID");
-       
+
 
         const response = await fetch(`${process.env.API_URL}/router/topcontributors?TeamID=${TeamID}`, {
             method: 'GET',
@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
 
         if (!response.ok) {
             console.log("Error response from backend:", response.status, response.statusText);
+            return NextResponse.json({ error: "Error fetching top contributors" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);

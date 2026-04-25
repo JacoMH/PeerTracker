@@ -17,7 +17,7 @@ export default async function deletetrellowebhook(currentBoardID: string, trello
 
         const webhookID = fetchWebhookID[0].Webhook;
 
-        console.log("webhook id");
+        console.log("webhook id", webhookID);
 
         //webhook link for the board
         const deleteInfo = await fetch(`https://api.trello.com/1/webhooks/${webhookID}?key=${process.env.TRELLO_API_KEY}&token=${trelloaccesstoken}`, {

@@ -7,7 +7,6 @@ export async function GET(req: NextRequest) {
         if (!access_token) {
             return NextResponse.json({ error: "No Access Token Provided" }, { status: 401 });
         }
-
         const params = req.nextUrl.searchParams;
         const TeamID = params.get("TeamID");
 

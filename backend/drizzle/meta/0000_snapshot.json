@@ -1,5 +1,5 @@
 {
-  "id": "af1c3a2b-57e5-4f9f-87ac-ead0d4f610a0",
+  "id": "411488b5-ec08-49bb-a691-09003f31181e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -39,6 +39,96 @@
           ],
           "columnsTo": [
             "CardID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Notification": {
+      "name": "Notification",
+      "schema": "",
+      "columns": {
+        "ReportID": {
+          "name": "ReportID",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "UserID": {
+          "name": "UserID",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ReportedUserID": {
+          "name": "ReportedUserID",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TeamID": {
+          "name": "TeamID",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Type": {
+          "name": "Type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Notification_UserID_users_UserID_fk": {
+          "name": "Notification_UserID_users_UserID_fk",
+          "tableFrom": "Notification",
+          "tableTo": "users",
+          "columnsFrom": [
+            "UserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "Notification_ReportedUserID_users_UserID_fk": {
+          "name": "Notification_ReportedUserID_users_UserID_fk",
+          "tableFrom": "Notification",
+          "tableTo": "users",
+          "columnsFrom": [
+            "ReportedUserID"
+          ],
+          "columnsTo": [
+            "UserID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "Notification_TeamID_teams_TeamID_fk": {
+          "name": "Notification_TeamID_teams_TeamID_fk",
+          "tableFrom": "Notification",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "TeamID"
+          ],
+          "columnsTo": [
+            "TeamID"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -162,6 +252,12 @@
         },
         "Webhook": {
           "name": "Webhook",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token": {
+          "name": "access_token",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -344,12 +440,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "refresh_token": {
-          "name": "refresh_token",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "accountName": {
           "name": "accountName",
           "type": "varchar",
@@ -403,18 +493,6 @@
         },
         "AccountID": {
           "name": "AccountID",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "section": {
-          "name": "section",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "name": "name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -490,6 +568,12 @@
         },
         "Webhook": {
           "name": "Webhook",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token": {
+          "name": "access_token",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -731,6 +815,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "GDPR_Agreement": {
+          "name": "GDPR_Agreement",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {},

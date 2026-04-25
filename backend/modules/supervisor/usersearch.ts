@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 
 import { users } from 'db.ts';
-import { eq, or, and } from 'drizzle-orm';
+import { eq, or, ilike, and } from 'drizzle-orm';
 // Interface
 import { User } from '../../interface/User.ts';
 
@@ -18,6 +18,7 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
             return res.status(401).json({ error: "Unauthorized" });
         }
         const SearchQuery = req.query.query || "";
+        console.log("SearchQuery: ", SearchQuery);
 
         const searchUser = await db.select({
             UserID: users.UserID,
@@ -31,15 +32,15 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
                 and(
                     eq(users.Role, "Student"),
                     or(
-                        eq(users.Email, SearchQuery?.toString()),
-                        eq(users.FirstName, SearchQuery?.toString()),
-                        eq(users.LastName, SearchQuery?.toString())
+                        ilike(users.Email, `%${SearchQuery}%`),
+                        ilike(users.FirstName, `%${SearchQuery}%`),
+                        ilike(users.LastName, `%${SearchQuery}%`)
                     )
                 )
             )
             .execute();
 
-       // console.log("Supervisor Teams:", searchUser);
+        console.log("Supervisor Teams:", searchUser);
         return res.status(200).json({ message: "Search Results", data: searchUser });
     }
     catch (error) {

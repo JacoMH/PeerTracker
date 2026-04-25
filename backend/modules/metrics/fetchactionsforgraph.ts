@@ -27,7 +27,8 @@ export default async function engagement(req: Request, res: Response) {
             const actionsCount = await db.select({
                 AccountID: TrelloAction.AccountID,
                 date: trelloActionWeek.mapWith(String).as("date"),
-                actionsCount: count().as("count")
+             //   actionsCount: count().as("count"),
+                actionsCount: count(TrelloAction.ActionID).as("ActionsCount")
             })
                 .from(TrelloAction)
                 .innerJoin(TrelloBoard, eq(TrelloBoard.BoardID, TrelloBoard.BoardID))

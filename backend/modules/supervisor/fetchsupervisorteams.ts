@@ -45,6 +45,7 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
             .where(
                     eq(invites.SupervisorID, userId)
             )
+            .groupBy(invites.TeamID, teams.TeamName, studentCountSubquery.StudentCount)
             .execute();
 
         console.log("Supervisor Teams:", supervisorTeam);

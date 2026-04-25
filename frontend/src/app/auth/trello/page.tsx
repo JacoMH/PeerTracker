@@ -18,7 +18,7 @@ export default function github() {
     }, [])
 
     return (
-        <div>
+        <div className='flex items-center justify-center rounded-4xl text-black p-10'>
             Authorizing connection...
         </div>
     )

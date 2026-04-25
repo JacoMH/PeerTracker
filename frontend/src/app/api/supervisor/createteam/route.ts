@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
 
         const TeamName = body.TeamName;
-        const User: User[] = body.Users; 
+        const User: User[] = body.Users;
 
         const response = await fetch(`${process.env.API_URL}/router/createteam`, {
             method: 'POST',
@@ -31,12 +31,13 @@ export async function POST(req: NextRequest) {
 
         if (!response.ok) {
             console.log("Error response from backend:", response.status, response.statusText);
+            return NextResponse.json({ error: "Error creating team" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch (error) {
-        console.log("Error fetching user teams");
+        console.log("Error creating teams");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

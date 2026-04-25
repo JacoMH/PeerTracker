@@ -22,12 +22,13 @@ export async function GET(req: NextRequest) {
 
         if (!response.ok) {
             console.log("Error response from backend:", response.status, response.statusText);
+            return NextResponse.json({ error: "Error searching user" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch (error) {
-        console.log("Error fetching user teams");
+        console.log("Error searching user");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

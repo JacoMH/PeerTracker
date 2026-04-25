@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 export default async function createuser(req: Request, res: Response) {
     try {
         const access_token = req.headers.authorization?.slice(7); //Slices off Bearer leaving only the access_token https://stackoverflow.com/questions/44497550/how-to-retrieve-a-bearer-token-from-an-authorization-header-in-javascript-angul
-
+        console.log("hello here");
      //   console.log("headers: ", req.headers);
         //verify supabase
         const userResponse = await supabaseClient.auth.getUser(access_token);

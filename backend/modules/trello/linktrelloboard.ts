@@ -38,8 +38,6 @@ export default async function linktrelloboard(req: Request, res: Response) {
 
         console.log("token:::::::::::::::::::", fetchToken[0].access_token);
 
-        //    console.log("token:::::: ", token);
-
 
         // board pulled
         const getBoard = await fetch(`https://api.trello.com/1/boards/${urlID}?key=${process.env.TRELLO_API_KEY}&token=${token}`, {
@@ -55,14 +53,17 @@ export default async function linktrelloboard(req: Request, res: Response) {
             console.log("failed to fetch board");
             return res.status(500).json({ message: "failed to fetch Board" })
         }
-        else {
-            //since the call returned we can delete current trello board
+
+        //since the call returned we can delete current trello board
+
+        if (currentBoard) {
             deletetrellowebhook(currentBoard, token)
+
             const deleteBoard = await db.delete(TrelloBoard)
                 .where(eq(TrelloBoard.BoardID, currentBoard));
         }
 
-     //   console.log("down here");
+        //   console.log("down here");
 
         const parsedBoardData = await getBoard.json();
 
@@ -72,7 +73,8 @@ export default async function linktrelloboard(req: Request, res: Response) {
             BoardID: parsedBoardData.id,
             TeamID: TeamID,
             BoardName: parsedBoardData.name,
-            BoardUrl: url
+            BoardUrl: url,
+            access_token: token
         };
         const storeBoard = await db.insert(TrelloBoard)
             .values(insertboard)

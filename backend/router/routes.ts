@@ -3,40 +3,55 @@ import express from 'express';
 const router = express.Router();
 
 // Paths
-import createuser from '../modules/user/createuser.ts'
-import fetchuser from '../modules/user/fetchuser.ts';
-import fetchuserteams from '../modules/user/fetchuserteams.ts';
-import { fetchuserinvites, updateinvites } from '../modules/user/userinvites.ts';
+import createuser from '../modules/account/createuser.ts'
+import fetchuser from '../modules/account/fetchuser.ts';
+import fetchuserteams from '../modules/account/fetchuserteams.ts';
+import { fetchuserinvites, updateinvites } from '../modules/account/userinvites.ts';
 import fetchsupervisorteams from '../modules/supervisor/fetchsupervisorteams.ts'
 import usersearch from '../modules/supervisor/usersearch.ts'
 import createteam from '../modules/supervisor/createteam.ts'
-import githubConnect from 'modules/user/githubconnect.ts';
+import githubConnect from 'modules/account/githubconnect.ts';
 import verifygithub from 'modules/github/verifygithub.ts';
 import fetchgithubrepo from 'modules/github/fetchgithubrepo.ts'
 import linkgithubrepo from 'modules/github/linkgithubrepo.ts'
 import updateDatabase from 'modules/github/updateDatabase.ts';
-import fetchallaccount from 'modules/fetchallaccount.ts';
-import fetchteam from 'modules/fetchteam.ts';
+import fetchallaccount from 'modules/account/fetchallaccount.ts';
+import fetchteam from 'modules/account/fetchteam.ts';
 import engagement from 'modules/metrics/engagement.ts'
-import activitythisweek from 'modules/metrics/activitythisweek.ts'
 import connectTrello from 'modules/trello/connectTrello.ts';
 import fetchtrelloboard from 'modules/trello/fetchtrelloboard.ts';
 import linktrelloboard from 'modules/trello/linktrelloboard.ts';
 import verifyTrello from 'modules/trello/verifytrello.ts';
 import updateTrelloDatabase from 'modules/trello/updateTrelloDatabase.ts';
 import topcontributors from 'modules/metrics/topcontributors.ts';
-import teamname from 'modules/teamname.ts'
+import teamname from 'modules/account/teamname.ts'
 import fetchactionsforgraph from 'modules/metrics/fetchactionsforgraph.ts';
 import fetchactionsperuser from 'modules/metrics/fetchactionsperuser.ts';
 import fetchtrellolists from 'modules/trello/fetchtrellolists.ts'
 import fetchtrellocards from 'modules/trello/fetchtrellocards.ts'
 import updatetrello from 'modules/webhook/updatetrello.ts'
 import updategithub from 'modules/webhook/updategithub.ts'
+import fetchcommitsperuser from 'modules/metrics/fetchcommitsperuser.ts'
+import deleteuser from 'modules/account/deleteuser.ts'
+import deleteteams from 'modules/supervisor/deleteteams.ts'
+import gdpragreement from 'modules/account/gdpragreement.ts'
+import fetchteammembers from 'modules/account/fetchteammembers.ts';
+import fetchusercommits from 'modules/account/fetchusercommits.ts';
+import reportuser from 'modules/account/reportuser.ts'
+import fetchNotifications from 'modules/notifications/fetchNotifications.ts';
+import deleteNotification from 'modules/notifications/deleteNotification.ts';
+
 // Routes
 
 // User
 router.post('/createuser', createuser)
 router.get('/fetchuser', fetchuser)
+router.get('/deleteuser', deleteuser)
+router.post('/gdpragreement', gdpragreement)
+router.post('/fetchteammembers', fetchteammembers);
+router.get('/fetchusercommits', fetchusercommits);
+router.post('/reportuser', reportuser)
+
 
 // User Teams
 router.get('/fetchuserteams', fetchuserteams)
@@ -48,6 +63,13 @@ router.get('/fetchsupervisorteams', fetchsupervisorteams)
 router.get('/usersearch', usersearch)
 router.post('/createteam', createteam)
 router.post('/githubconnect', githubConnect)
+router.post(`/deleteteams`, deleteteams)
+router.get(`/fetchNotifications`, fetchNotifications)
+router.post('/deleteNotification', deleteNotification)
+
+//Teams
+router.get('/fetchteammembers', fetchteammembers);
+
 
 //User Invites
 router.get('/fetchuserinvites', fetchuserinvites);
@@ -72,10 +94,12 @@ router.get('/fetchtrellocards', fetchtrellocards)
 
 //metrics
 router.get('/engagement', engagement);
-router.get('/activitythisweek', activitythisweek)
 router.get('/topcontributors', topcontributors)
 router.get('/fetchactionsforgraph', fetchactionsforgraph)
 router.get('/fetchactionsperuser', fetchactionsperuser)
+router.get('/fetchcommitsperuser', fetchcommitsperuser)
+
+
 
 
 

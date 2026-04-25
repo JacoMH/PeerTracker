@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 
-export async function FetchUserRole(): Promise<string | null> {
+export async function FetchUserRole(UserID: string | null): Promise<string | null> {
     const { data } = await supabase.auth.getSession();
     
     // Checks if there is no session
@@ -11,10 +11,12 @@ export async function FetchUserRole(): Promise<string | null> {
 
     const access_token = data?.session?.access_token;
 
+    console.log("UserID: ", data.session.user.id)
+
     if (data?.session) {
         // backend api call for fetching user info
         try {
-            const res = await fetch("/api/user/fetchuser", {
+            const res = await fetch(`/api/account/fetchuser?UserID=${UserID}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

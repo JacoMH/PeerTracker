@@ -65,7 +65,7 @@ export default async function updateDatabase(req: Request, res: Response) {
                 "Accept": "application/json",
                 "Accept-Encoding": "application/json",
                 'X-GitHub-Api-Version': '2026-03-10',
-                "application": `Bearer ${githubaccesstoken}`
+                "Authorization": `Bearer ${githubaccesstoken}`
             }
         })
 
@@ -74,6 +74,10 @@ export default async function updateDatabase(req: Request, res: Response) {
         }
 
         const parsedRepoData = await getRepo.json();
+
+        if (parsedRepoData.private === false) {
+            return res.status(500).json({ message: "Private Repos Only" })
+        }
 
         const repoId = parsedRepoData.id;
 
@@ -102,7 +106,7 @@ export default async function updateDatabase(req: Request, res: Response) {
                     'Content-Type': 'application/json',
                     "Accept": "application/json",
                     "Accept-Encoding": "application/json",
-                    "Authorization": `token ${githubaccesstoken}`
+                    "Authorization": `Bearer ${githubaccesstoken}`
                 }
             })
             //     console.log("fetchCommits", fetchCommits);
@@ -151,5 +155,5 @@ export default async function updateDatabase(req: Request, res: Response) {
     catch {
         res.status(500).json({ message: "Failed to update database" });
     }
-   
+
 }

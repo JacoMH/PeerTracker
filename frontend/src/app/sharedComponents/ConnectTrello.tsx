@@ -7,9 +7,7 @@ interface Team {
 export default function ConnectTrello(Team: Team) {
     // Check here if user is new or needs to get a new token by comparing their id with the github_integration access_token
     return (
-        <div>
-            <button onClick={() => ConnectTrello()}>Connect Trello</button>
-        </div>
+            <button className="hover:bg-gray-400 max-h-10 h-full hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black p-2 rounded-2xl" onClick={() => ConnectTrello()}>Connect Trello</button>
     )
 
     async function ConnectTrello() {
