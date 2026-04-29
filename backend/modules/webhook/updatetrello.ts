@@ -11,7 +11,6 @@ export default async function updatetrello(req: Request) {
         if (req.body.action.type === "updateCard") {
 
             if (req.body.action.data.list?.id) {
-                console.log("update card")
                 await db.update(TrelloCard)
                     .set({
                         ListID: req.body.action.data.list?.id,
@@ -22,7 +21,6 @@ export default async function updatetrello(req: Request) {
                     .where(eq(TrelloCard.CardID, req.body.action.data.card?.id));
             }
             else {
-                console.log("this one")
                 await db.update(TrelloCard)
                     .set({
                         name: req.body.action.data.card?.name,
@@ -33,14 +31,12 @@ export default async function updatetrello(req: Request) {
             }
         }
         else if (req.body.action.type === "addMemberToCard") {
-            console.log("Add member to card");
             await db.insert(AssignedCard).values({
                 CardID: req.body.action.data.card?.id,
                 AccountID: req.body.action.data?.idMember,
             })
         }
         else if (req.body.action.type === "removeMemberFromCard") {
-            console.log("remove member from card")
             await db.delete(AssignedCard).where(
                 and(
                     eq(AssignedCard.CardID, req.body.action.data.card?.id),
@@ -49,7 +45,6 @@ export default async function updatetrello(req: Request) {
             )
         }
         else if (req.body.action.type === "createCard") {
-            console.log("create card")
             await db.insert(TrelloCard).values({
                 CardID: req.body.action.data.card?.id,
                 BoardID: req.body.action.data.board?.id,
@@ -60,11 +55,9 @@ export default async function updatetrello(req: Request) {
             })
         }
         else if (req.body.action.type === "deleteCard") {
-            console.log("delete card")
             await db.delete(TrelloCard).where(eq(TrelloCard.CardID, req.body.action.data.card?.id))
         }
         else if (req.body.action.type === "createList") {
-            console.log("create list")
             await db.insert(TrelloList).values({
                 ListID: req.body.action.data.list?.id,
                 BoardID: req.body.action.data.board?.id,
@@ -74,7 +67,6 @@ export default async function updatetrello(req: Request) {
             })
         }
         else if (req.body.action.type === "updateList") {
-            console.log("update list")
             await db.update(TrelloList).set({
                 ListID: req.body.action.data.list.id,
                 BoardID: req.body.action.data.board.id,
@@ -96,7 +88,6 @@ export default async function updatetrello(req: Request) {
             date_created: new Date(req.body.action.date)
         })
 
-        console.log("updated: ", req.body.action)
     }
     catch (error) {
         console.log("Error updating trello using webhook:", error);

@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
                 'authorization': `Bearer ${access_token}`
             }
         })
-        console.log("answer:", response);
 
         if (!response.ok) {
             console.log("Error response from backend:", response.status, response.statusText);

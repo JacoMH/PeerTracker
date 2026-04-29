@@ -26,14 +26,12 @@ export async function POST(req: NextRequest) {
         })
 
         if (!response.ok) {
-            console.log("Response:dasdasdasdasdasd ", response)
-            console.error("Error response from backend:", response.status, response.statusText);
-            return NextResponse.json({ error: "Error linking trello" }, { status: 500 });
+            return NextResponse.json({ error: "Error linking trello account" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch {
-        return NextResponse.json({ error: "failed to store token" }, { status: 500 });
+        return NextResponse.json({ error: "failed to link trello account" }, { status: 500 });
     }
 }

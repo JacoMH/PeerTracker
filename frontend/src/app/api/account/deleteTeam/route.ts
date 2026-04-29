@@ -24,13 +24,13 @@ export async function POST(req: NextRequest) {
         })
         if (!response.ok) {
             console.error("Error response from backend:", response.status, response.statusText);
-            return NextResponse.json({ error: "Error deleting user from database" }, { status: 500 });
+            return NextResponse.json({ error: "Error deleting team from database" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch (error) {
-        console.log("Error deleting user here:", error);
+        console.log("Error deleting team here:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

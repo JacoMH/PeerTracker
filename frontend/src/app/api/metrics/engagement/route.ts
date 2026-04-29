@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
         const BoardID = params.get("BoardID");
         const TeamID = params.get("TeamID")
 
-        console.log("Board ID: ", BoardID, "Repo ID: ", RepoID);
+    //    console.log("Board ID: ", BoardID, "Repo ID: ", RepoID);
 
         const response = await fetch(`${process.env.API_URL}/router/engagement?RepoID=${RepoID}&BoardID=${BoardID}&TeamID=${TeamID}`, {
             method: 'GET',

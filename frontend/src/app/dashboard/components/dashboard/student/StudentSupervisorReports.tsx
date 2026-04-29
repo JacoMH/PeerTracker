@@ -147,7 +147,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
     async function getEngagement() {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        console.log("repoid: ", RepoID, "boardid: ", BoardID, "teamid: ", TeamID);
+    //    console.log("repoid: ", RepoID, "boardid: ", BoardID, "teamid: ", TeamID);
 
         const res = await fetch(`/api/metrics/engagement?RepoID=${RepoID}&BoardID=${BoardID}&TeamID=${TeamID}`, {
             method: 'GET',
@@ -163,7 +163,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
 
         const response = await res.json();
 
-        console.log("engagement metrics: ", response.data)
+    //    console.log("engagement metrics: ", response.data)
 
         setEngagementMetrics(response.data);
     }
@@ -172,7 +172,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
 
-        console.log("TeamID:", TeamID);
+       // console.log("TeamID:", TeamID);
 
         const res = await fetch(`/api/account/fetchteammembers?TeamID=${TeamID}`, {
             method: 'GET',
@@ -189,7 +189,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
         const response = await res.json();
 
 
-        console.log("Team: ", response)
+//console.log("Team: ", response)
         setTeamName(response.data[0].TeamName);
 
         setTeamMembers(response.data);

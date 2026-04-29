@@ -37,7 +37,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(data);
     }
     catch (error) {
-        console.log("Error creating teams");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

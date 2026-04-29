@@ -24,8 +24,7 @@ interface Props {
 }
 
 
-ChartJS.register( //https://react-chartjs-2.js.org/examples/line-chart/ this for chart.js in react and also fix the loading issues with the link repos and board and also cycling through everything on each load, fix it 
-    CategoryScale,
+ChartJS.register( //https://react-chartjs-2.js.org/examples/line-chart/ this for chart.js in react
     LinearScale,
     PointElement,
     LineElement,
@@ -67,7 +66,7 @@ export default function Engagement({ RepoID, BoardID, TeamID }: Props) {
     const [displayMetrics, setDisplayMetrics] = useState<displayMetrics[]>([]);
 
     const dataSetup = {
-        labels: displayMetrics.map(label => new Date(label.labelDate).toISOString().slice(2,10)),
+        labels: displayMetrics.map(label => new Date(label.labelDate).toISOString().slice(2, 10)),
         datasets: [
             {
                 label: 'Github Commits',
@@ -92,7 +91,7 @@ export default function Engagement({ RepoID, BoardID, TeamID }: Props) {
             },
             title: {
                 display: true,
-                text: 'Engagement Chart',
+                text: 'Team Engagement Chart',
             },
         },
     };
@@ -104,7 +103,7 @@ export default function Engagement({ RepoID, BoardID, TeamID }: Props) {
     }, [])
 
     useEffect(() => {
-        //fill this with the labels, then change the commitcounts alongside those labels to its corresponding week https://medium.com/@wisecobbler/4-ways-to-populate-an-array-in-javascript-836952aea79f
+        //filled this with the labels, then changed the commitcounts alongside those labels to its corresponding week https://medium.com/@wisecobbler/4-ways-to-populate-an-array-in-javascript-836952aea79f
         const labelArray = Array.from({ length: 7 }, (_, i) => ({
             TrelloAction: 0,
             CommitCount: 0,
@@ -113,9 +112,8 @@ export default function Engagement({ RepoID, BoardID, TeamID }: Props) {
         //set github data
         if (engagementMetrics) {
 
-            console.log("github data:", engagementMetrics)
+            //   console.log("github data:", engagementMetrics)
             for (const githubdata of engagementMetrics.githubdata) {
-                console.log("engagement metrics", engagementMetrics);
                 //set commit value to the week
                 let matchedDate = labelArray.find(label => label.labelDate === startOfWeek(githubdata.date).toISOString())
 
@@ -125,15 +123,13 @@ export default function Engagement({ RepoID, BoardID, TeamID }: Props) {
             }
 
             for (const trellodata of engagementMetrics.trellodata) {
-                console.log("trelloData: ", trellodata);
+                //  console.log("trelloData: ", trellodata);
                 //set commit value to the week
                 let matchedDate = labelArray.find(label => label.labelDate === startOfWeek(trellodata.date).toISOString())
-                console.log("trello date: ", trellodata.date);
                 if (matchedDate) {
                     matchedDate.TrelloAction = Number(trellodata.TrelloAction)
                 }
 
-                console.log("matchedDate: ", matchedDate);
             }
 
             setDisplayMetrics(labelArray.reverse());
@@ -170,7 +166,7 @@ export default function Engagement({ RepoID, BoardID, TeamID }: Props) {
 
         const response = await res.json();
 
-        console.log("engagement metrics: ", response.data)
+        //    console.log("engagement metrics: ", response.data)
 
         setEngagementMetrics(response.data);
     }

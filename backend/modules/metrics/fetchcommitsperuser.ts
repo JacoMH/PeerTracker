@@ -38,7 +38,6 @@ export default async function fetchcommitsperuser(req: Request, res: Response) {
             const githubQuery = await db.select({
                 UserID: users.UserID,
                 date: githubCommitHour.mapWith(String).as("date"),
-                //CommitCount: sql`COUNT(${githubcommits.CommitID})`,
                 CommitCount: count(githubcommits.CommitID)
             })
                 .from(githubcommits)

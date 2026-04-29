@@ -41,7 +41,7 @@ export default async function fetchusercommits(req: Request<User>, res: Response
             ))
             .execute();
 
-        console.log("fetchusercommits: ", fetchusercommits);
+        //console.log("fetchusercommits: ", fetchusercommits);
 
         return res.status(200).json({ message: "Fetched User Commits", data: fetchusercommits })
     }

@@ -23,6 +23,7 @@ export default async function deleteteams(req: Request, res: Response) {
         const TeamID = req.body.TeamID;
         console.log("TeamID: ", TeamID);
 
+        //grab trello board and github repo so i can delete webhooks if they exist
         const getTrelloBoard = await db.select()
             .from(TrelloBoard)
             .where(eq(TrelloBoard.TeamID, TeamID))
@@ -55,11 +56,9 @@ export default async function deleteteams(req: Request, res: Response) {
 
         console.log("BoardID: ", BoardID, "TRELLOACCESSTOKEN: ", trelloaccesstoken, "RepoID: ", RepoID, "githubaccesstoken: ", githubaccesstoken);
 
-        //delete webhooks too but there may have to be modifications to the db for it to work right, 
-        // like whoever manages to link the repo has their access_token put on the repo
 
+        // whoever creates to link the repo or board has their access_token put on the repo or board so it is used to delete the webhook
         if (getTrelloBoard.length !== 0) {
-            console.log("haidhasiodhaosidj");
             await deletetrellowebhook(getTrelloBoard[0].BoardID, getTrelloBoard[0].access_token ?? "")
         }
         else {

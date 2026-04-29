@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from 'next/navigation'
 import { supabase } from "@/lib/supabase";
 import { FaEdit } from "react-icons/fa";
-import { X } from 'lucide-react'
+import { Rss, X } from 'lucide-react'
 
 // Modules
 
@@ -60,19 +60,21 @@ export default function DashboardPage() {
     const router = useRouter();
     const params = useParams();
 
-    // Check to see if the account already has a github auth connection
+    // On Load
     useEffect(() => {
         const fetchRole = async () => {
             const { data } = await supabase.auth.getSession();
             const userRole = await FetchUserRole(data.session?.user.id ?? null);
-            setRole(userRole);
+            setRole(userRole || "Unknown");
             console.log("User Role:", userRole);
-            if (userRole === null) {
+            if (userRole === "Unknown") {
                 router.push("/auth/login");
             }
         }
 
         const setTeam = async () => {
+            await checkTeamExists(params.team as string);
+            console.log("teamid: ", params.team);
             setTeamID(params.team as String);
         }
         fetchRole();
@@ -85,6 +87,7 @@ export default function DashboardPage() {
         console.log("github repo url: ", githubRepoUrl)
     }, [githubRepoUrl])
 
+    //functions that handle popups 
     async function handleGithubRepoResponse(response: boolean) {
         setGithubRepoState(response);
         await FetchGithubRepo();
@@ -134,6 +137,7 @@ export default function DashboardPage() {
     }
 
 
+    // Checks user type
     useEffect(() => {
         const fetchInfo = async () => {
             await FetchGithubRepo();
@@ -178,7 +182,7 @@ export default function DashboardPage() {
                                             <div className="flex flex-col p-4 justify-content-start w-[30%] h-full bg-gray-400 rounded-sm">
                                                 <StudentColumn TeamID={TeamID} ReportModal={reportModalMenu} />
                                             </div>
-                                            {/* all the main stuff goes here, put teamID into all the modules to get the right data */}
+                                            {/* Metrics shown here */}
 
                                             <div className="flex flex-col min-h-screen w-full">
                                                 <div className="flex flex-row min-h-[45%] ">
@@ -196,6 +200,8 @@ export default function DashboardPage() {
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {/* Popup Modals for student */}
                                             {
 
                                                 //Menu for modifying github repo and trello board
@@ -214,6 +220,7 @@ export default function DashboardPage() {
                                             }
 
                                             {
+                                                //Show user trello data
                                                 userIdForContributionModal ? (
                                                     <div className="z-100 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                                         <TrelloActionsUser TeamID={TeamID as string} UserID={userIdForContributionModal} BoardID={trelloBoardID} sendModal={toggleCardModalMenu} />
@@ -232,6 +239,7 @@ export default function DashboardPage() {
                                             }
 
                                             {
+                                                //Show github heatmap data
                                                 userIdForHeatmpModal ? (
                                                     <div className="z-100 flex justify-center absolute w-full h-full bg-gray-200/40">
                                                         <GithubHeatmap UserID={userIdForHeatmpModal} RepoID={githubRepoID} descriptionresponse={ToggleDescriptionResponse} />
@@ -247,11 +255,14 @@ export default function DashboardPage() {
                                             }
 
                                             {
+                                                //Show more info on trello card
                                                 modalCard?.CardID ? (
                                                     <div className="z-150 flex items-center justify-center absolute w-full h-full bg-gray-200/40 ">
-                                                        <DisplayCard CardID={modalCard.CardID} ListID={modalCard.ListID} name={modalCard.name}
-                                                            dueComplete={modalCard.dueComplete} dueDate={modalCard.dueDate} BoardID={modalCard.BoardID}
-                                                            ListName={modalCard.ListName} ListClosed={modalCard.ListClosed} />
+                                                        <div className="bg-gray-400 p-10 rounded-2xl max-w-200 m-2">
+                                                            <DisplayCard CardID={modalCard.CardID} ListID={modalCard.ListID} name={modalCard.name}
+                                                                dueComplete={modalCard.dueComplete} dueDate={modalCard.dueDate} BoardID={modalCard.BoardID}
+                                                                ListName={modalCard.ListName} ListClosed={modalCard.ListClosed} />
+                                                        </div>
                                                         <div className="z-100 absolute w-full flex justify-end place-self-start">
                                                             <button className="flex h-[45%] hover:cursor-pointer" onClick={() => setModalCard(null)}>
                                                                 <X size={40} />
@@ -265,10 +276,11 @@ export default function DashboardPage() {
                                             }
 
                                             {
+                                                //show commit description
                                                 descriptionresponse ? (
                                                     <div className="z-150 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                                         <div className='bg-gray-400 p-10 rounded-2xl max-w-200 m-2'>
-                                                            <p className="max-w-200 p-10 m-2">{descriptionresponse}</p>
+                                                            <p className="max-w-200 p-10 m-2 text-white">{descriptionresponse}</p>
                                                         </div>
                                                         <div className="z-100 absolute w-full flex justify-end place-self-start">
                                                             <button className="flex h-[45%] hover:cursor-pointer" onClick={() => setDescriptionResponse(null)}>
@@ -284,6 +296,7 @@ export default function DashboardPage() {
                                             }
 
                                             {
+                                                //report window
                                                 userIDForReport ? (
                                                     <div className="z-150 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                                         <div className='bg-gray-400 p-10 rounded-2xl max-w-200 m-2'>
@@ -319,15 +332,13 @@ export default function DashboardPage() {
             <main className="flex min-w-screen w-full min-h-screen">
                 <section className="flex w-full min-h-screen ">
                     {/*Dashboard for supervisor*/}
-                    {/* Connect your github window */}
                     {
                         githubRepoState && trelloBoardState ? (
                             <section className="flex flex-row w-full min-h-screen h-full">
                                 <div className="flex flex-col p-4 justify-content-start w-[30%] h-full bg-gray-400 rounded-sm">
                                     <SupervisorColumn TeamID={TeamID} ReportModal={reportModalMenu} />
                                 </div>
-                                {/* all the main stuff goes here, put teamID into all the modules to get the right data */}
-
+                                {/* Metrics shown here */}
                                 <div className="flex flex-col min-h-screen w-full">
                                     <div className="flex flex-row min-h-[45%] ">
                                         <div className="flex p-5 rounded-2xl bg-gray-400 m-2 items-start"><TopContributors TeamID={TeamID}
@@ -344,7 +355,9 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
 
+                                {/* Popup modals for supervisor */}
                                 {
+                                    //Trello User Info
                                     userIdForContributionModal ? (
                                         <div className="z-100 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                             <TrelloActionsUser TeamID={TeamID as string} UserID={userIdForContributionModal}
@@ -363,6 +376,7 @@ export default function DashboardPage() {
                                 }
 
                                 {
+                                    //Github heatmap of user commits
                                     userIdForHeatmpModal ? (
                                         <div className="z-100 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                             <GithubHeatmap UserID={userIdForHeatmpModal} RepoID={githubRepoID} descriptionresponse={ToggleDescriptionResponse} />
@@ -380,10 +394,11 @@ export default function DashboardPage() {
                                 }
 
                                 {
+                                    //github commit description
                                     descriptionresponse ? (
                                         <div className="z-150 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                             <div className='bg-gray-400 p-10 rounded-2xl max-w-200 m-2'>
-                                                <p className="max-w-200 p-10 m-2">{descriptionresponse}</p>
+                                                <p className="max-w-200 p-10 m-2 text-white">{descriptionresponse}</p>
                                             </div>
                                             <div className="z-100 absolute w-full flex justify-end place-self-start">
                                                 <button className="flex h-[45%] hover:cursor-pointer" onClick={() => setDescriptionResponse(null)}>
@@ -399,6 +414,7 @@ export default function DashboardPage() {
                                 }
 
                                 {
+                                    //report popup
                                     userIDForReport ? (
                                         <div className="z-150 flex items-center justify-center absolute w-full h-full bg-gray-200/40">
                                             <div className='bg-gray-400 p-10 rounded-2xl max-w-200 m-2'>
@@ -418,11 +434,14 @@ export default function DashboardPage() {
                                 }
 
                                 {
+                                    //trello card info popup
                                     modalCard?.CardID ? (
                                         <div className="z-150 flex items-center justify-center absolute w-full h-full bg-gray-200/40 ">
-                                            <DisplayCard CardID={modalCard.CardID} ListID={modalCard.ListID} name={modalCard.name}
-                                                dueComplete={modalCard.dueComplete} dueDate={modalCard.dueDate} BoardID={modalCard.BoardID}
-                                                ListName={modalCard.ListName} ListClosed={modalCard.ListClosed} />
+                                            <div className="bg-gray-400 p-10 rounded-2xl max-w-200 m-2">
+                                                <DisplayCard CardID={modalCard.CardID} ListID={modalCard.ListID} name={modalCard.name}
+                                                    dueComplete={modalCard.dueComplete} dueDate={modalCard.dueDate} BoardID={modalCard.BoardID}
+                                                    ListName={modalCard.ListName} ListClosed={modalCard.ListClosed} />
+                                            </div>
                                             <div className="z-100 absolute w-full flex justify-end place-self-start">
                                                 <button className="flex h-[45%] hover:cursor-pointer" onClick={() => setModalCard(null)}>
                                                     <X size={40} />
@@ -449,6 +468,7 @@ export default function DashboardPage() {
                     <div className="flex flex-col justify-center items-center bg-gray-500 max-w-150 rounded-2xl max-h-70 h-full w-full gap-5">
                         <div className="text-4xl font-bold flex justify-center mb-10 ">Connect Tools</div>
                         <div className="flex gap-5">
+                            {/* Integrate Tools */}
                             {!toggleGithubIntegration ? <ConnectGithub TeamID={TeamID} /> : <div className="text-center bg-gray-400 text-black p-2 rounded-2xl">Github Verified</div>}  {/* Pass TeamID to connectgithub to help with redirect https://www.youtube.com/watch?v=s6DGVtkX9R0*/}
                             {!toggleTrelloIntegration ? <ConnectTrello TeamID={TeamID} /> : <div className="text-center bg-gray-400 text-black p-2 rounded-2xl">Trello Verified</div>}
                         </div>
@@ -549,7 +569,7 @@ export default function DashboardPage() {
         //Fetch to see if trello board exists
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        console.log("start of trello");
+       // console.log("start of trello");
 
 
         const res = await fetch(`/api/auth/trello/fetchtrelloboard?TeamID=${TeamID}`, {
@@ -564,14 +584,13 @@ export default function DashboardPage() {
             console.log("Error fetching github repo:", res)
         }
 
-        //  console.log("response: ", res);
 
 
         const response = await res.json();
 
         if (response.message === "Trello Board Exists") {
-            console.log("here made it too")
-            console.log("BOARD URL HERE: :::::", response.data[0].BoardUrl);
+           // console.log("here made it too")
+            //console.log("BOARD URL HERE: :::::", response.data[0].BoardUrl);
 
             setTrelloBoardState(true);
             setTrelloBoardID(response.data[0].BoardID)
@@ -581,6 +600,31 @@ export default function DashboardPage() {
             setTrelloBoardState(false);
         }
         console.log("response: ", response);
+    }
+
+    async function checkTeamExists(teamid: string) {
+        //Fetch to see if trello board exists
+        const { data } = await supabase.auth.getSession();
+        const access_token = data?.session?.access_token;
+      //  console.log("teamid: ", teamid);
+        const res = await fetch(`/api/account/teamname?TeamID=${teamid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${access_token}`
+            }
+        });
+
+        if (!res.ok) {
+            console.log("Error fetching github repo:", res)
+        }
+
+        const response = await res.json();
+
+        if (response.data.length === 0) {
+            router.push("/dashboard/menu")
+        }
+
     }
 }
 

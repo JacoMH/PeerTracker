@@ -53,8 +53,8 @@ export default function github() {
         }
 
         const response = await res.json();
-
-        console.log("response:", response);
+        //
+     //   console.log("response:", response);
 
         //redirects back using teamID
         router.push(`/dashboard/teams/${TeamID}`);

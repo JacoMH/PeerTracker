@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import Chart from "react-apexcharts";
 
-
-
-
 interface Props {
     UserID: string;
     RepoID: string;
@@ -40,7 +37,7 @@ export default function GithubHeatmap({ UserID, RepoID, descriptionresponse }: P
     const [githubCommits, setGithubCommits] = useState<[]>([]);
     //query by having a where between two dates, then between those dates each column is an hour of the day where github commits are grouped into it
 
-
+   // https://apexcharts.com/javascript-chart-demos/heatmap-charts/basic/
     //link the docs and the stackoverflow that helped
     const state = {
         options: {
@@ -53,8 +50,8 @@ export default function GithubHeatmap({ UserID, RepoID, descriptionresponse }: P
             {
                 name: "Commits",
                 data: Array.from({ length: 24 }, (_, i) => ({
-                    x: i < 10 ? `0${i}:00` : `${i}:00`,
-                    y: displayMetrics.find(metric => metric.labelHour === (i < 10 ? `0${i}:00` : `${i}:00`))?.CommitCount || 0
+                    x: i < 10 ? `0${i}:00` : `${i}:00`, //formats in 00:00
+                    y: displayMetrics.find(metric => metric.labelHour === (i < 10 ? `0${i}:00` : `${i}:00`))?.CommitCount || 0 //finds the commits that link to the same hour to map
                 }))
             },
         ],
@@ -82,19 +79,19 @@ export default function GithubHeatmap({ UserID, RepoID, descriptionresponse }: P
             for (const commitData of commitsForGraph) {
                 let matchedHour = labelArray.find(label => label.labelHour.toString() === commitData.date.split(" ")[1].slice(0, 5).toString())
                 if (matchedHour) {
-                    console.log("commitCount: ", commitData.CommitCount, "Number(commitData.commitCount): ", Number(commitData.CommitCount));
-                    matchedHour.CommitCount += Number(commitData.CommitCount);
+                //    console.log("commitCount: ", commitData.CommitCount, "Number(commitData.commitCount): ", Number(commitData.CommitCount));
+                    matchedHour.CommitCount += Number(commitData.CommitCount); //for matched hours, it adds found commits to it
                 }
             }
         }
 
-        console.log("label array: ", labelArray);
+       // console.log("label array: ", labelArray);
         setDisplayMetrics(labelArray);
 
     }, [commitsForGraph])
 
     useEffect(() => {
-        console.log("displayMetricsddd: ", githubCommits);
+        console.log("displayMetrics: ", githubCommits);
     }, [githubCommits])
 
     return (
@@ -172,7 +169,7 @@ export default function GithubHeatmap({ UserID, RepoID, descriptionresponse }: P
 
         const response = await res.json();
 
-        console.log("response:asdadsasdasgef ddfsdf:: ", response.data)
+   //     console.log("response: ", response.data)
 
         setCommitsForGraph(response.data);
     }

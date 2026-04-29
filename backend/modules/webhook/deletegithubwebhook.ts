@@ -30,7 +30,7 @@ export default async function deletegithubwebhook(currentRepoID: string, githuba
 
         if (webhookID) {
             //webhook link for the repo
-            const deleteInfo = await fetch(`https://api.github.com/repos/${owner}/${githubRepo}/hooks/${webhookID}`, {
+            const deleteInfo = await fetch(`https://api.github.com/repos/${owner}/${githubRepo}/hooks/${webhookID}`, { //https://docs.github.com/en/rest/repos/webhooks?apiVersion=2026-03-10#delete-a-repository-webhook
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

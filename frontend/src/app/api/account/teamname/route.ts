@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
 
         const params = req.nextUrl.searchParams;
         const TeamID = params.get("TeamID");
+        console.log("haiusdhaosudaiusodhaiosdj", TeamID)
 
         const response = await fetch(`${process.env.API_URL}/router/teamname?TeamID=${TeamID}`, {
             method: 'GET',

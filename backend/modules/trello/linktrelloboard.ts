@@ -36,7 +36,7 @@ export default async function linktrelloboard(req: Request, res: Response) {
 
         const token = fetchToken[0].access_token;
 
-        console.log("token:::::::::::::::::::", fetchToken[0].access_token);
+       // console.log("token:::::::::::::::::::", fetchToken[0].access_token);
 
 
         // board pulled
@@ -68,7 +68,7 @@ export default async function linktrelloboard(req: Request, res: Response) {
         const parsedBoardData = await getBoard.json();
 
 
-        ////if getrepo is success, store new info in db alongside TeamID
+        //if getrepo is success, store new info in db alongside TeamID
         const insertboard: any = {
             BoardID: parsedBoardData.id,
             TeamID: TeamID,

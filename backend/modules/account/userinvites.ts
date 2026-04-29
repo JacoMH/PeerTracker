@@ -11,7 +11,6 @@ async function getUserIdFromRequest(req: Request<User>): Promise<string | null> 
     console.log("authorization: ", access_token);
     // Fetch user ID using access token which also validates the token
     const userResponse = await supabaseClient.auth.getUser(access_token);
-    console.log("user Response: ", userResponse);
     if (userResponse.error || !userResponse.data.user) {
         console.error("Error fetching user from Supabase:", userResponse.error);
         return null;
@@ -32,15 +31,6 @@ export async function fetchuserinvites(req: Request<User>, res: Response) {
 
         //create alias to the users table for linking up supervisors https://orm.drizzle.team/docs/joins#aliases--selfjoins
         let supervisor = alias(users, "supervisor");
-
-        //Fetch supervisor name
-      /*  const supervisorSubquery = db.select({
-            SupervisorID: users.UserID,
-            SupervisorFirstName: users.FirstName,
-            SupervisorLastName: users.LastName,
-        })
-            .from(users)
-            .as("supervisor_info");*/
 
         // Fetch user info using ID
         const userInvites = await db.select({

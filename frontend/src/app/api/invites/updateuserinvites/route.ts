@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
 
     }
     catch (error) {
-        console.log("Error fetching user invites");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

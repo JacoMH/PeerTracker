@@ -27,12 +27,14 @@ export default async function engagement(req: Request, res: Response) {
             const actionsCount = await db.select({
                 AccountID: TrelloAction.AccountID,
                 date: trelloActionWeek.mapWith(String).as("date"),
-             //   actionsCount: count().as("count"),
                 actionsCount: count(TrelloAction.ActionID).as("ActionsCount")
             })
                 .from(TrelloAction)
                 .innerJoin(TrelloBoard, eq(TrelloBoard.BoardID, TrelloBoard.BoardID))
-                .where(eq(TrelloBoard.TeamID, TeamID))
+                .where(and(
+                    eq(TrelloBoard.TeamID, TeamID),
+                    eq(TrelloAction.BoardID, TrelloBoard.BoardID)
+                ))
                 .groupBy(TrelloAction.AccountID, trelloActionWeek.mapWith(String).as("date"))
                 .as("actionCount")
 
@@ -49,11 +51,14 @@ export default async function engagement(req: Request, res: Response) {
                 .where(
                     and(
                         eq(invites.status, "Accepted"),
-                        eq(invites.UserID, UserID)
+                        eq(invites.UserID, UserID),
+                        eq(invites.TeamID, TeamID)
                     )
                 )
                 .groupBy(trello_integrations.AccountID, users.UserID, actionsCount.actionsCount, actionsCount.date)
                 .execute();
+
+                console.log("Top Contributors: ", trelloEngagementQuery);
 
             return res.status(200).json({ message: "returning data for top contributors", data: trelloEngagementQuery })
         }

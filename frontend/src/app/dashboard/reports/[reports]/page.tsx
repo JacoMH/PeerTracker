@@ -17,7 +17,6 @@ import { FadeLoader } from "react-spinners";
 
 export default function reports() {
     const params = useParams();
-    const searchParams = useSearchParams();
     const [role, setRole] = useState("");
     const router = useRouter();
     const [RepoID, setRepoID] = useState("");
@@ -66,6 +65,7 @@ export default function reports() {
         ) : (
             role === "Student" ? (
                 <main className="bg-gray-200 justify-center flex flex-row w-full h-screen">
+                    {/* Student View*/}
                     <div className="flex flex-col p-4 w-[30%] h-full bg-gray-400 rounded-sm">
                         <StudentColumn TeamID={TeamID} ReportModal={reportModalMenu} />
                     </div>
@@ -94,6 +94,7 @@ export default function reports() {
                 </main>
             ) : role === "Supervisor" ? (
                 <main className="bg-gray-200 justify-center flex flex-row w-full h-screen">
+                    {/* Supervisor View*/}
                     <div className="flex flex-col p-4 w-[30%] h-full bg-gray-400 rounded-sm">
                         <SupervisorColumn TeamID={TeamID} ReportModal={reportModalMenu} />
                     </div>
@@ -131,7 +132,7 @@ export default function reports() {
     async function getBoard() {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        console.log("start of trello");
+        //   console.log("start of trello");
 
 
         const res = await fetch(`/api/auth/trello/fetchtrelloboard?TeamID=${TeamID}`, {
@@ -149,8 +150,8 @@ export default function reports() {
         const response = await res.json();
 
         if (response.message === "Trello Board Exists") {
-            console.log("here made it too")
-            console.log("BOARD URL HERE: :::::", response.data[0].BoardUrl);
+            //     console.log("here made it too")
+            //   console.log("BOARD URL HERE: :::::", response.data[0].BoardUrl);
 
             setBoardID(response.data[0].BoardID)
         }
@@ -176,7 +177,7 @@ export default function reports() {
         const response = await res.json();
 
         if (response.message === "Github Repos Exist") {
-            console.log("REPO URL HERE: :::::", response.data[0].RepoUrl);
+            //      console.log("REPO URL HERE: :::::", response.data[0].RepoUrl);
             setRepoID(response.data[0].RepoID)
         }
     }

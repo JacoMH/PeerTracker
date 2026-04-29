@@ -23,8 +23,7 @@ export default async function fetchteammembers(req: Request, res: Response) {
         const TeamID = req.query.TeamID || "";
         const UserID = userResponse.data.user.id;
         console.log("TeamID:", TeamID);
-        // check db for github repo related to the team
-
+        // check db for members in the team
         const fetchteam = await db.select({
             TeamID: invites.TeamID,
             TeamName: teams.TeamName,

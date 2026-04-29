@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
         const TeamID = params.get("TeamID");
         const url = params.get("url");
         const currentRepo = params.get("currentRepo");
-        console.log("TeamID", TeamID, "url", url, "currentrepo:", currentRepo);
+       // console.log("TeamID", TeamID, "url", url, "currentrepo:", currentRepo);
 
         const response = await fetch(`${process.env.API_URL}/router/linkgithubrepo?TeamID=${TeamID}&url=${url}&currentRepo=${currentRepo}`, {
             method: 'GET',
@@ -30,7 +30,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(data);
     }
     catch (error) {
-        console.log("Error linking github repo");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

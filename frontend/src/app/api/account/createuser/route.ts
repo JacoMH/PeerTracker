@@ -11,7 +11,6 @@ export async function POST(req: Request, res: Response) {
     }
     const body = await req.json();
 
-    console.log("hedijasoijdaoisjdeeeeeeeee");
     const response = await fetch(process.env.API_URL + '/router/createuser', {
       method: 'POST',
       headers: {

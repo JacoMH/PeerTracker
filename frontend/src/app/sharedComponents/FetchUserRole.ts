@@ -11,7 +11,7 @@ export async function FetchUserRole(UserID: string | null): Promise<string | nul
 
     const access_token = data?.session?.access_token;
 
-    console.log("UserID: ", data.session.user.id)
+    //console.log("UserID: ", data.session.user.id)
 
     if (data?.session) {
         // backend api call for fetching user info

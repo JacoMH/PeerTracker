@@ -1,16 +1,14 @@
-//so checks last commits for unique accounts in commits, finds accounts that are tied to them if it can, then sends notification to the account if not done anything in beyond 2 weeks
-
 //https://kevincunningham.co.uk/posts/node-cron/
 
-
 import { github_integrations, githubcommits, githubrepos, Notification, teams, users } from "../../db.ts";
-import { and, eq, desc } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 import cron from "node-cron";
-import { db, supabaseClient } from '../../index.ts'
+import { db } from '../../index.ts'
 
 export async function workDoneGithub() {
     //runs daily
-    cron.schedule("0 0 * * *", async () => {
+    /*cron.schedule("0 0 * * *",*/ 
+    (async () => {
         console.log("I will run every minute.")
 
         //fetch the individual last commits from each user, the repo that was in and then link it to the team
@@ -93,5 +91,5 @@ export async function workDoneGithub() {
         }
 
 
-    });
+    })();
 }

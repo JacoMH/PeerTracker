@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         const params = req.nextUrl.searchParams;
         const UserID = params.get("UserID")
 
-        console.log("userid: ", UserID)
+      //  console.log("userid: ", UserID)
 
         const response = await fetch(`${process.env.API_URL}/router/fetchuser?UserID=${UserID}`, {
             method: 'GET',

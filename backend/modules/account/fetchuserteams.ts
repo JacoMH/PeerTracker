@@ -34,21 +34,9 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
 
         let supervisor = alias(users, "supervisor");
 
-        //Fetch supervisor name
-        /* const supervisorSubquery = db.select({
-             SupervisorID: invites.SupervisorID,
-             FirstName: users.FirstName,
-             LastName: users.LastName,
-         })
-             .from(invites)
-             .innerJoin(users, eq(users.UserID, invites.SupervisorID))
-             .as("supervisor_info");*/
-
-
         const userTeams = await db.select({
             TeamID: invites.TeamID,
             TeamName: teams.TeamName,
-         //   MemberCount: memberCountSubquery.count,
             SupervisorID: supervisor.UserID,
             SupervisorFirstname: supervisor.FirstName,
             SupervisorLastname: supervisor.LastName,
@@ -59,7 +47,6 @@ export default async function fetchuserteams(req: Request<User>, res: Response) 
             .innerJoin(teams, eq(teams.TeamID, invites.TeamID))
             .leftJoin(memberCountSubquery, eq(memberCountSubquery.TeamID, invites.TeamID))
             .leftJoin(supervisor, eq(supervisor.UserID, invites.SupervisorID))
-           // .leftJoin(memberCountSubquery, eq(memberCountSubquery.TeamID, teams.TeamID))
             .where(
                 and(
                     eq(users.UserID, userId.toString()),

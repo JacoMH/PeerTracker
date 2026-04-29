@@ -11,7 +11,7 @@ export default async function creategithubwebhook(owner: string, repo: string, r
     try {
         //post request to github repo to store the ngrok url in
         console.log("hellooooooo");
-        const githubRepoPost = await fetch(`https://api.github.com/repos/${owner}/${repo}/hooks`, {
+        const githubRepoPost = await fetch(`https://api.github.com/repos/${owner}/${repo}/hooks`, { //https://docs.github.com/en/rest/repos/webhooks?apiVersion=2026-03-10#create-a-repository-webhook
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -36,8 +36,6 @@ export default async function creategithubwebhook(owner: string, repo: string, r
             console.log("error creating github webhook: ", githubRepoPost)
             return;
         }
-
-        console.log("the response for webhook:", githubRepoPost);
 
         const response = await githubRepoPost.json();
 

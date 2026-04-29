@@ -1,7 +1,7 @@
 import { db, supabaseClient } from '../../index.ts'
 import { Request, Response } from 'express';
 import { github_integrations, githubcommits, githubrepos, invites, teams, trello_integrations, TrelloAction, TrelloBoard, users } from 'db.ts';
-import { eq, and, count } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 
 export default async function engagement(req: Request, res: Response) {
     try {
@@ -21,7 +21,6 @@ export default async function engagement(req: Request, res: Response) {
         const TeamID = query.TeamID as string;
 
         if (UserID && TeamID) {
-            // Do this query but include time in it
             const fetchActionsPerUser = await db.select({
                 ActionID: TrelloAction.ActionID,
                 CardID: TrelloAction.CardID,
@@ -40,9 +39,10 @@ export default async function engagement(req: Request, res: Response) {
                         eq(teams.TeamID, TeamID)
                     )
                 )
+                .orderBy(desc(TrelloAction.date_created))
                 .execute();
 
-            return res.status(200).json({ message: "returning data for top contributors", data: fetchActionsPerUser })
+            return res.status(200).json({ message: "returning data for user actions", data: fetchActionsPerUser })
         }
 
         return res.status(200).json({ message: "TeamID and UserID doesnt exist" })

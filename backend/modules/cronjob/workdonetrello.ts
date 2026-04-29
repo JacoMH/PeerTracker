@@ -13,8 +13,9 @@ import { db, supabaseClient } from '../../index.ts'
 export async function workDoneTrello() {
 
     //runs daily
-    cron.schedule("0 0 * * *", async () => {
-        //fetch the individual last commits from each user, the repo that was in and then link it to the team
+    //cron.schedule("0 0 * * *",
+    (async () => {
+        //fetch the individual last commits from each user, the board that was in and then link it to the team
 
         //go through github connections
         const trello_integrations_query = await db.select()
@@ -92,5 +93,5 @@ export async function workDoneTrello() {
                 }
             }
         }
-    })
+    })();
 }

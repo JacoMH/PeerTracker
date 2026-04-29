@@ -69,6 +69,11 @@ export default function SignUpForm() {
         )
     )
     async function signUpAPI() {
+        if (password.length < 6) {
+            setError("Password is too short")
+            return;
+        }
+
         if (password === confirmPassword) {
             try {
                 // Sign up user with email and password using Supabase auth
@@ -86,7 +91,6 @@ export default function SignUpForm() {
                 let userId = data.user?.id || ''
 
                 let access_token = data.session?.access_token;
-                console.log("helloasodijaos")
 
                 // Store role from backend with user id from auth user in http cookie
                 const res = await fetch("/api/account/createuser", {
@@ -108,10 +112,8 @@ export default function SignUpForm() {
                 if (!res.ok) {
                     return setError("Error creating user in database")
                 }
-                console.log("helloasodijaosijdaoisjdoiajsoidjasiojdaiosjdoiajskvmsko")
 
                 const response = await res.json();
-                console.log("hello redirect here")
                 // enables login redirect module if account creation is successful
                 setEnableLoginRedirect(true);
             }

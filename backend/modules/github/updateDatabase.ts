@@ -22,7 +22,7 @@ interface githubCommits {
     description: string,
     date_created: Date;
 }
-
+//inserts all info from api in initial sync
 export default async function updateDatabase(req: Request, res: Response) {
     try {
         const access_token = req.headers.authorization?.slice(7);

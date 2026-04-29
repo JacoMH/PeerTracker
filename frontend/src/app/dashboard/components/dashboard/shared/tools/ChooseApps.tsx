@@ -21,12 +21,12 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
     useEffect(() => {
         setGithubRepoUrl(repoUrl);
         setTrelloBoardUrl(boardUrl);
-    },[repoUrl, boardUrl])
+    }, [repoUrl, boardUrl])
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("current Repo: ", repoID);
         console.log("current Board: ", boardID);
-    },[repoID])
+    },[repoID])*/
 
     return (
         <div className="bg-gray-200 p-20 rounded-2xl">
@@ -36,16 +36,16 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
                     <div className="flex flex-col">
                         <label htmlFor="githubRepo" className="flex justify-center text-lg font-bold">Github Repo </label>
                         <label htmlFor="githubRepo" className="text-sm text-center">*Ensure the Repo is private</label>
-                        <input className=' bg-gray-300 p-2 rounded-full' type='text' name='githubRepo' placeholder="Enter Repository URL" 
-                        value={githubRepoUrl} onChange={(e) => setGithubRepoUrl(e.target.value)}></input>
+                        <input className=' bg-gray-300 p-2 rounded-full' type='text' name='githubRepo' placeholder="Enter Repository URL"
+                            value={githubRepoUrl} onChange={(e) => setGithubRepoUrl(e.target.value)}></input>
                     </div>
 
 
                     <div className="flex flex-col">
-                        <label htmlFor="githubRepo" className="flex justify-center text-lg font-bold">Trello Board: </label>
-                        <label htmlFor="githubRepo" className="text-sm text-center">*Ensure the Board is public</label>
-                        <input className=' bg-gray-300 p-2 rounded-full' type='text' name='githubRepo' placeholder="Enter Repository URL" 
-                        value={trelloBoardUrl} onChange={(e) => setTrelloBoardUrl(e.target.value)}></input>
+                        <label htmlFor="githubRepo" className="flex justify-center text-lg font-bold">Trello Board </label>
+                        <label htmlFor="githubRepo" className="text-sm text-center">*Ensure the Board visibility is Workspace</label>
+                        <input className=' bg-gray-300 p-2 rounded-full' type='text' name='githubRepo' placeholder="Enter Repository URL"
+                            value={trelloBoardUrl} onChange={(e) => setTrelloBoardUrl(e.target.value)}></input>
                     </div>
                 </div>
                 <button className="flex mt-10 place-self-center p-3 rounded-2xl hover:bg-gray-200 hover:text-black text-center hover:cursor-pointer bg-gray-600 text-white" type="submit">
@@ -69,7 +69,7 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
         //Adds repo to db
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        console.log("TeamID", TeamID, "githubRepoUrl: ", githubRepoUrl);
+        //     console.log("TeamID", TeamID, "githubRepoUrl: ", githubRepoUrl);
 
 
 
@@ -116,9 +116,9 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
         const result = await res.json();
 
         if (result.message === "Board Stored") {
-            console.log("Successful");
+            //     console.log("Successful");
             await updateTrelloDatabase();
-            console.log("hello i made it here");
+            //     console.log("hello i made it here");
             responseTrello(true);
         }
 
@@ -129,7 +129,7 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
 
-        console.log("rest of the trello updating here");
+        //   console.log("rest of the trello updating here");
 
 
 
@@ -143,9 +143,6 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
             }
         });
 
-
-        console.log("hellooooajsodijasoidjaosidj");
-
         if (!res.ok) {
             console.log("Error updating Invite", res.status, res.statusText)
         }
@@ -155,7 +152,7 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
         console.log("result: ", result);
 
         if (result.message === "Successful Database Update") {
-            console.log("Successful here too");
+            //      console.log("Successful here too");
             responseTrello(true);
         }
     }
@@ -166,7 +163,7 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
         //grabbing github commits and putting to db
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        console.log("TeamID", TeamID, "githubRepoUrl: ", githubRepoUrl);
+        //    console.log("TeamID", TeamID, "githubRepoUrl: ", githubRepoUrl);
 
         const res = await fetch(`/api/auth/github/updateDatabase?TeamID=${TeamID}&url=${githubRepoUrl}`, {
             method: 'GET',
@@ -182,7 +179,6 @@ export default function ChooseApps({ TeamID, responseGithub, responseTrello, rep
         const result = await res.json();
 
         if (result.message === "Repo Stored") {
-            console.log("Successful");
             responseGithub(true);
         }
     }

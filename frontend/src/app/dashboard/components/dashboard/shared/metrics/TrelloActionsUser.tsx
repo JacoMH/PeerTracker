@@ -67,7 +67,7 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
             },
             title: {
                 display: true,
-                text: 'Engagement Chart',
+                text: 'User Trello Engagement Chart',
             },
         },
     };
@@ -95,14 +95,14 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
     useEffect(() => {
         const labelArray = Array.from({ length: 7 }, (_, i) => ({
             ActionsCount: 0,
-            labelDate: format(startOfWeek(subWeeks(Date.now(), i)), "dd-MM-yy") // weeks going back 7 weeks
+            labelDate: startOfWeek(subWeeks(Date.now(), i)).toISOString().slice(2,10), // weeks going back 7 weeks
         }))
         //set github data
         if (trelloActionForGraph) {
-
+            console.log("trelloactionsforgraph: ", trelloActionForGraph);
             for (const action of trelloActionForGraph) {
                 //set action value to the week
-                let matchedDate = labelArray.find(label => label.labelDate === format(startOfWeek(action.date), "dd-MM-yy"))
+                let matchedDate = labelArray.find(label => label.labelDate === startOfWeek(action.date).toISOString().slice(2,10))
 
                 if (matchedDate) {
                     matchedDate.ActionsCount = Number(action.ActionsCount);
@@ -115,9 +115,13 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
         }
     }, [trelloActionForGraph])
 
+    useEffect(() => {
+        console.log("DisplayMetrics: ", displayMetrics);
+    },[displayMetrics])
+
     const parsedData = (data: any) => {
         let parsedData = JSON.parse(data);
-
+        console.log("parsedData: ", parsedData);
         if (!parsedData) {
             return "Empty"
         }
@@ -128,6 +132,9 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
         }
         else if (parsedData.closed === false) {
             return "Archived Card";
+        }
+        else if (parsedData.name) {
+            return `changed from ${parsedData.name}`
         }
         else {
             return "Empty"
@@ -162,12 +169,12 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
                             <tbody className="flex flex-col w-full items-center overflow-y-auto max-h-70 gap-3">
                                 {trelloActionMetrics.map((action: TrelloAction) => (
                                     <tr key={action.ActionID} className="flex flex-row w-full bg-gray-300 px-3 py-1 rounded-2xl justify-between gap-25">
-                                        <td className=" px-5 items-center flex-wrap" >{action.type}</td>
+                                        <td className=" px-5 items-center flex-wrap" >{action.type.includes('"') ? action.type.split('"')[1] : action.type}</td>
                                         <td className=" px-2 items-center flex-wrap" aria-label={action.oldData} >
                                             <div className="px-2 items-center flex-wrap">{parsedData(action.oldData)}</div>
                                         </td>
                                         {
-                                            action.oldData === null ? (
+                                            action.CardID === null || action.type === '"updateList"' || action.type === '"createList"'  ? (
                                                 <td className="px-2 items-center max-w-60 text-center bg-green-300 text-black rounded-2xl opacity-35">Current Card</td>
 
                                             ) : (
@@ -212,7 +219,7 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
 
         const response = await res.json();
 
-        console.log("trello actions: ", response.data)
+     //   console.log("trello actions: ", response.data)
 
         setTrelloActionMetrics(response.data);
     }
@@ -237,7 +244,7 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
 
         const response = await res.json();
 
-        console.log("trello actions for graph: ", response.data)
+     //   console.log("trello actions for graph: ", response.data)
 
         setTrelloActionForGraph(response.data);
     }

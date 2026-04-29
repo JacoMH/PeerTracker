@@ -8,8 +8,6 @@ import { trello_integrations } from 'db.ts';
 
 export default async function connectTrello(req: Request, res: Response) {
     try {
-
-      //  console.log("HEIDAJSODIJASOIDJASOIDJASIOFJWRUIOGNSIFNASO");
         const access_token = req.headers.authorization?.slice(7); // access_token
 
         // Fetch user ID using access token which also validates the token
@@ -24,10 +22,6 @@ export default async function connectTrello(req: Request, res: Response) {
         const body = req.body;
 
         const Token = body.token as string;
-
-      //  console.log("Tokensidaojsiodjaosidj: ", Token);
-
-
 
         //fetch other info for the backend
         const fetchInfo = await fetch(`https://api.trello.com/1/members/me?key=${process.env.TRELLO_API_KEY}&token=${Token}`, {
@@ -48,23 +42,32 @@ export default async function connectTrello(req: Request, res: Response) {
 
         console.log("Parsed Info: ", parsedInfo);
 
-        //put trello token in backend
-        const insertTrelloAccount = await db.insert(trello_integrations).values({
-            AccountID: parsedInfo.id,
-            UserID: userId,
-            accountName: parsedInfo.username,
-            url: parsedInfo.url,
-            access_token: Token
-        }).returning()
+        //check if already exists
+        const exists = await db.select({ AccountID: trello_integrations.AccountID })
+            .from(trello_integrations).where(eq(trello_integrations.AccountID, parsedInfo.id))
 
-        if (insertTrelloAccount.length > 0) {
-            return res.status(200).json({ message: "Trello Account Inserted Into Database" })
+        console.log("exists: ", exists)
+
+        if (exists.length > 0) {
+            return res.status(500).json({ message: "Another user has connected this Trello account" })
         }
         else {
-            return res.status(200).json({ message: "Failed to insert trello Account Into Database"})
+            //put trello token in backend
+            const insertTrelloAccount = await db.insert(trello_integrations).values({
+                AccountID: parsedInfo.id,
+                UserID: userId,
+                accountName: parsedInfo.username,
+                url: parsedInfo.url,
+                access_token: Token
+            }).returning()
+
+            if (insertTrelloAccount.length > 0) {
+                return res.status(200).json({ message: "Trello Account Inserted Into Database" })
+            }
+            else {
+                return res.status(200).json({ message: "Failed to insert trello Account Into Database" })
+            }
         }
-
-
     }
     catch (error) {
         console.log("Error completing creating team process:", error);

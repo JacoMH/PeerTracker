@@ -77,17 +77,27 @@ export default async function githubConnect(req: Request, res: Response) {
         }
 
         const userInfo = await githubUserInfo.json();
+        //check if already exists
+        const exists = await db.select({ AccountID: github_integrations.AccountID })
+            .from(github_integrations).where(eq(github_integrations.AccountID, userInfo.id))
 
-        const InsertInfo = await db.insert(github_integrations).values({
-            AccountID: userInfo.id,
-            UserID: UserId || "no user",
-            access_token: github_access_token,
-            accountName: userInfo.login,
-            url: userInfo.html_url
-        });
+        console.log("exists: ", exists)
 
-        return res.status(200).json({ message: "Github Integrated successfully" });
+        if (exists.length > 0) {
+            console.log("another user has connected")
+            return res.status(500).json({ message: "Another user has connected this Github account" })
+        }
+        else {
+            const InsertInfo = await db.insert(github_integrations).values({
+                AccountID: userInfo.id,
+                UserID: UserId || "no user",
+                access_token: github_access_token,
+                accountName: userInfo.login,
+                url: userInfo.html_url
+            });
 
+            return res.status(200).json({ message: "Github Integrated successfully" });
+        }
     }
     catch (error) {
         console.log("Error fetching github access token:", error);

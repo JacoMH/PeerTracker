@@ -26,6 +26,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(data);
     }
     catch (error) {
-        return NextResponse.json({ error: "failed to verify github integration" }, { status: 500 });
+        return NextResponse.json({ error: "failed to fetch github repo" }, { status: 500 });
     }
 }

@@ -6,12 +6,11 @@ export async function GET(req: NextRequest) {
         if (!access_token) {
             return NextResponse.json({ error: "No Access Token Provided" }, { status: 401 });
         }
-        console.log("madeinauisdnaiusdhaiusod")
 
         const params = req.nextUrl.searchParams;
         const TeamID = params.get("TeamID");
         const url = params.get("url");
-        console.log("TeamID", TeamID, "url", url);
+       // console.log("TeamID", TeamID, "url", url);
 
         const response = await fetch(`${process.env.API_URL}/router/updateDatabase?TeamID=${TeamID}&url=${url}`, {
             method: 'GET',
@@ -28,6 +27,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(data);
     }
     catch (error) {
-        return NextResponse.json({ error: "failed to verify github integration" }, { status: 500 });
+        return NextResponse.json({ error: "failed to update database" }, { status: 500 });
     }
 }

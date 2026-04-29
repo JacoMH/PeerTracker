@@ -53,18 +53,20 @@ export default function ReportUser({ UserID, TeamID, closeWindow }: Props) {
     return (
         role === "Student" ? (
             <main >
+                {/* Report User Student End */}
                 <div>
                     {
                         Array.isArray(user) && user.length > 0 ? (
                             user.map((user: any) => (
-                                <form key={user.UserID} onSubmit={(e) => { e.preventDefault(); reportUser(TeamID, user.UserID, description, "Supervisor") }}>
+                                <form key={user.UserID} className="text-white" onSubmit={(e) => { e.preventDefault(); description.length > 0 ? reportUser(TeamID, user.UserID, description, "Supervisor") : setError("Empty") }}>
                                     <div>
                                         <div className="">Role: {user.Role}</div>
                                         <div>{user.FirstName} {user.LastName}</div>
                                         <div>In Team: {teamName}</div>
                                         <div>Report Description: </div>
-                                        <input type='text' name='description' className="p-2 bg-gray-600 rounded-2xl text-white flex justify-center" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                        <input type='text' maxLength={30} name='description' className="p-2 bg-gray-600 rounded-2xl text-white flex justify-center" value={description} onChange={(e) => setDescription(e.target.value)} />
                                         <input type="Submit" />
+                                        <div className="text-red-500 text-center">{error}</div>
                                     </div>
                                 </form>
                             ))
@@ -79,16 +81,18 @@ export default function ReportUser({ UserID, TeamID, closeWindow }: Props) {
             </main>
         ) : role === "Supervisor" ? (
             <main>
+                {/* Report User Supervisor End */}
                 {
                     Array.isArray(user) && user.length > 0 ? (
                         user.map((user: any) => (
-                            <form key={user.UserID} className="flex flex-col p-5 gap-2" onSubmit={(e) => { e.preventDefault(); reportUser(TeamID, user.UserID, description, "Student") }}>
+                            <form key={user.UserID} className="flex flex-col p-5 gap-2 text-white" onSubmit={(e) => { e.preventDefault(); description.length > 0 ? reportUser(TeamID, user.UserID, description, "Student") : setError("Empty") }}>
                                 <div >Role: {user.Role}</div>
                                 <div>{user.FirstName} {user.LastName}</div>
                                 <div>In Team: {teamName}</div>
                                 <div>Report Description: </div>
-                                <input type='text' name='description' className="p-2 bg-gray-600 rounded-2xl text-white flex justify-center" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                <input type="Submit" />
+                                <input type='text' maxLength={30} name='description' className="p-2 bg-gray-600 rounded-2xl text-white flex justify-center" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                <input className="hover:bg-gray-400 hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black p-2 rounded-2xl " type="Submit" />
+                                <div className="text-red-500 text-center">{error}</div>
                             </form>
                         ))
                     ) : (
@@ -144,7 +148,7 @@ export default function ReportUser({ UserID, TeamID, closeWindow }: Props) {
 
         const response = await res.json();
 
-        console.log("Team: ", response);
+        //    console.log("Team: ", response);
 
         setTeamName(response.data[0].name)
     }

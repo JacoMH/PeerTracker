@@ -49,7 +49,7 @@ export default function SupervisorColumn({ TeamID, ReportModal }: Props) {
                                     <PiStudent size={25} className="items-center flex" />{Supervisor.Role}
                                 </div>
                             </div>
-
+                            {/* Navigation Buttons */}
                             <div className="flex m-1 p-3 flex-col gap-1">
                                 <button className="flex flex-row text-xl items-center rounded-2xl hover:cursor-pointer hover:text-gray-200 hover:bg-gray-600 bg-gray-200 p-3"
                                     onClick={() => router.push(`/dashboard/teams/${TeamID}`)}>Dashboard</button>
@@ -93,6 +93,7 @@ export default function SupervisorColumn({ TeamID, ReportModal }: Props) {
             <section>
                 <span className="flex justify-center mt-5 text-xl font-bold">Members</span>
                 <div className="m-1 p-2 rounded-2xl bg-gray-200 overflow-y-scroll max-h-30 h-full">
+                    {/* Members in team */}
                     {Array.isArray(SupervisorData) && SupervisorData.length > 0 ? (
                         SupervisorData.map((Supervisor: any) => (
                             <div key={Supervisor.UserID} className="flex flex-row">
@@ -228,7 +229,7 @@ export default function SupervisorColumn({ TeamID, ReportModal }: Props) {
 
         const response = await res.json();
 
-        console.log("supervisorNotifications: ", response);
+        //     console.log("supervisorNotifications: ", response);
         setNotifications(response.data);
     }
 
@@ -236,7 +237,7 @@ export default function SupervisorColumn({ TeamID, ReportModal }: Props) {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
 
-        console.log("notificationid: ", notificationID);
+       // console.log("notificationid: ", notificationID);
         const res = await fetch(`/api/notifications/deleteNotification`, {
             method: 'POST',
             headers: {

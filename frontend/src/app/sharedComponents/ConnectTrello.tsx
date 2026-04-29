@@ -3,9 +3,8 @@
 interface Team {
     TeamID: String;
 }
-// https://medium.com/@tony.infisical/guide-to-using-oauth-2-0-to-access-github-api-818383862591 used this tutorial to help setup connection
+//https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/ used this tutorial to help setup connection
 export default function ConnectTrello(Team: Team) {
-    // Check here if user is new or needs to get a new token by comparing their id with the github_integration access_token
     return (
             <button className="hover:bg-gray-400 max-h-10 h-full hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black p-2 rounded-2xl" onClick={() => ConnectTrello()}>Connect Trello</button>
     )

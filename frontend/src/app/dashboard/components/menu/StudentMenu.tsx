@@ -32,9 +32,9 @@ export default function StudentMenu() {
         console.log("User Invites: ", userInvites);
     }, [userInvites])
     return (
-        <div className='bg-gray-600 flex p-10 justify-between w-full max-w-300 h-full max-h-150 rounded-2xl'>
+        <div className='bg-gray-600 flex p-10 justify-between w-full max-w-300 h-full max-h-150 rounded-2xl text-white'>
             <div className='flex flex-col max-w-[45%] w-full'>
-                <div className="text-5xl font-bold flex justify-center mb-10">Select Team</div>
+                <div className="text-5xl font-bold flex justify-center mb-10 text-white">Select Team</div>
                 <div className="border rounded-4xl bg-gray-400 w-full flex justify-self-center max-h-120 h-full px-10 py-5">
                     <div className='flex flex-col gap-5 justify-content-start overflow-y-scroll max-h-100 h-full w-full'>
                         {Array.isArray(userTeam) && userTeam.length > 0 ? (
@@ -64,8 +64,8 @@ export default function StudentMenu() {
                 </div>
             </div>
 
-            <div className='flex flex-col justify-start max-w-[45%] w-full h-full'>
-                <div className="text-5xl font-bold  mb-10 self-center">Team Invites</div>
+            <div className='flex flex-col justify-start max-w-[45%] w-full h-full text-white'>
+                <div className="text-5xl font-bold  mb-10 self-center ">Team Invites</div>
                 <div className='border rounded-4xl bg-gray-400 w-full flex max-h-205 h-full px-5 py-5'>
                     {Array.isArray(userInvites) && userInvites.length > 0 ? (
                         userInvites.map((invite: any) => (

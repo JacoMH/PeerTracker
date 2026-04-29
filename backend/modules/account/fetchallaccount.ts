@@ -16,7 +16,6 @@ export default async function fetchgithubaccount(req: Request, res: Response) {
             return res.status(401).json({ error: "Unauthorized" });
         }
         const userId = userResponse.data.user.id;
-        const TeamID = req.query.TeamID as String;
         // check db for github repo related to the team
         const fetchgithub = await db.select({
             UserID: users.UserID,

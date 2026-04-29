@@ -4,8 +4,6 @@ import { db, supabaseClient } from '../../index.ts'
 import { eq } from 'drizzle-orm'
 
 // Interface
-import { User } from '../../interface/User.ts';
-
 export default async function deleteuser(req: Request, res: Response) {
     try {
         // Create user in database with other information

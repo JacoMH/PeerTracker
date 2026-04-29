@@ -7,8 +7,8 @@ import { eq, and, ne } from 'drizzle-orm';
 
 export default async function fetchteam(req: Request, res: Response) {
     try {
-        const access_token = req.headers.authorization?.slice(7); 
-      //  console.log("headers: ", req.headers);
+        const access_token = req.headers.authorization?.slice(7);
+        //  console.log("headers: ", req.headers);
         //verify supabase
         const userResponse = await supabaseClient.auth.getUser(access_token);
 
@@ -16,8 +16,6 @@ export default async function fetchteam(req: Request, res: Response) {
             console.error("Error fetching user from Supabase:", userResponse.error);
             return res.status(401).json({ error: "Unauthorized" });
         }
-
-
 
         const TeamID = req.query.TeamID as string;
         // check db for github repo related to the team
@@ -31,7 +29,6 @@ export default async function fetchteam(req: Request, res: Response) {
             .where(eq(teams.TeamID, TeamID))
             .execute()
 
-        console.log("Team Name: ", team, TeamID)
         return res.status(200).json({ message: "Fetched team name", data: team })
     }
     catch (error) {

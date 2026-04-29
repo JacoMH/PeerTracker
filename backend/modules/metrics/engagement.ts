@@ -35,7 +35,6 @@ export default async function engagement(req: Request, res: Response) {
         const trelloQuery = await db.select({
             TeamID: TrelloBoard.TeamID,
             date: trelloActionWeek.mapWith(String).as("date"),
-         //   TrelloAction: sql`COUNT(${TrelloAction.ActionID})`,
             TrelloAction: count(TrelloAction.ActionID) 
         })
             .from(TrelloBoard)
@@ -55,7 +54,6 @@ export default async function engagement(req: Request, res: Response) {
         const githubQuery = await db.select({
             TeamID: githubrepos.TeamID,
             date: githubCommitsWeek.mapWith(String).as("date"),
-         //   CommitCount: sql`COUNT(${githubcommits.CommitID})`, //switch to the other one
             CommitCount: count(githubcommits.CommitID),
         })
             .from(githubrepos)

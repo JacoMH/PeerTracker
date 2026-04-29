@@ -24,7 +24,6 @@ export default function StudentColumn({ TeamID, ReportModal }: Props) {
     useEffect(() => {
         const getInfo = async () => {
             const { data } = await supabase.auth.getSession();
-            const access_token = data?.session?.access_token;
             await fetchallaccount();
             await fetchteaminfo();
             await getTeamName();
@@ -51,7 +50,7 @@ export default function StudentColumn({ TeamID, ReportModal }: Props) {
                                 <div className="flex flex-row text-xl items-center gap-2"><PiStudent size={25} className="items-center flex" />{Student.Role}</div>
                             </div>
 
-
+                            {/*Navigation Buttons*/}
                             <div className="flex m-1 p-3 flex-col gap-1">
                                 <button className="flex flex-row text-xl items-center rounded-2xl hover:cursor-pointer hover:text-gray-200 hover:bg-gray-600 bg-gray-200 p-3"
                                     onClick={() => router.push(`/dashboard/teams/${TeamID}`)}>Dashboard</button>
@@ -86,10 +85,27 @@ export default function StudentColumn({ TeamID, ReportModal }: Props) {
                                     <div className="flex justify-between gap-2">
                                         <div className="flex flex-row">
                                             <button type='button' className='z-100 mr-3' onClick={() => deleteNotification(notification.ReportID)}><X /></button>
+                                            {
+                                                notification.Type === "Github" || notification.Type === "Trello" ? (
+                                                    <div>
+                                                        System Warning for {notification.Type}
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )
+                                            }
                                             <div>{notification.ReporterUserFirstName} {notification.ReporterUserLastName}</div>
                                             <div className="flex flex-wrap max-w-30 wrap-break-word">{notification.Description}</div>
-                                            <a href={`mailto:${notification.Email}`} className="flex place-self-center self-center text-sm p-3 rounded-2xl bg-blue-400 hover:text-white text-center hover:cursor-pointer hover:bg-blue-200 text-white"
-                                                target="_blank">Email</a> {/* https://careerkarma.com/blog/html-email-link/#:~:text=The%20HTML%20mailto%20link%20opens,body%20with%20a%20mailto%20link. */}
+                                            {
+                                                notification.Type === "Github" || notification.Type === "Trello" ? (
+                                                    <div>
+                                                    </div>
+                                                ) : (
+                                                    <a href={`mailto:${notification.Email}`} className="flex place-self-center self-center text-sm p-3 rounded-2xl bg-blue-400 hover:text-white text-center hover:cursor-pointer hover:bg-blue-200 text-white"
+                                                        target="_blank">Email</a> // https://careerkarma.com/blog/html-email-link/#:~:text=The%20HTML%20mailto%20link%20opens,body%20with%20a%20mailto%20link.
+                                                )
+                                            }
+
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +120,7 @@ export default function StudentColumn({ TeamID, ReportModal }: Props) {
             </section>
 
             <section className="mt-5">
-                <span className="flex justify-center mt-5 text-xl font-bold">Members</span>
+                <span className="flex justify-center mt-5 text-xl font-bold">Students</span>
                 <div className="m-1 p-2 rounded-2xl bg-gray-200 overflow-y-scroll max-h-30 h-full">
                     {Array.isArray(StudentData) && StudentData.length > 0 ? (
                         StudentData.map((Student: any) => (
@@ -202,6 +218,7 @@ export default function StudentColumn({ TeamID, ReportModal }: Props) {
         }
 
         const response = await res.json();
+        console.log("TeamData: ", response.data);
         SetTeamData(response.data);
 
     }

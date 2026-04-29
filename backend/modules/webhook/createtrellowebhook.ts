@@ -20,7 +20,7 @@ export default async function createtrellowebhook(BoardID: string, userid: strin
 
 
         //webhook link for the board
-        const fetchInfo = await fetch(`https://api.trello.com/1/tokens/${access_token}/webhooks/?key=${process.env.TRELLO_API_KEY}`, {
+        const fetchInfo = await fetch(`https://api.trello.com/1/tokens/${access_token}/webhooks/?key=${process.env.TRELLO_API_KEY}`, { //https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

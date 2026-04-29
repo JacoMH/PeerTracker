@@ -24,12 +24,12 @@ export async function GET(req: NextRequest) {
 
         if (!response.ok) {
             console.error("Error response from backend:", response.status, response.statusText);
-            return NextResponse.json({ error: "Error fetching trello" }, { status: 500 });
+            return NextResponse.json({ error: "Error updating trello database" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch {
-        return NextResponse.json({ error: "failed to fetch trello board" }, { status: 500 });
+        return NextResponse.json({ error: "failed to update trello database" }, { status: 500 });
     }
 }

@@ -23,7 +23,7 @@ export default async function deleteNotification(req: Request, res: Response) {
 
         console.log("ReportID: ", ReportID);
 
-        const deleteNotification = await db.delete(Notification)
+        await db.delete(Notification)
             .where(eq(Notification.ReportID, ReportID))
             .execute();
 

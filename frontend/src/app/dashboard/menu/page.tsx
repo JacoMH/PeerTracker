@@ -17,7 +17,6 @@ export default function DashboardMenu() {
 
     useEffect(() => {
         const fetchRole = async () => {
-            await fetchUser();
             const { data } = await supabase.auth.getSession();
             if (data.session?.user.id) {
                 console.log("datasessionuserid: ", data.session?.user.id)
@@ -28,6 +27,10 @@ export default function DashboardMenu() {
                 if (userRole === null) {
                     router.push("/auth/login");
                 }
+                await fetchUser();
+            }
+            else {
+                router.push("/auth/login");
             }
         }
         fetchRole();
@@ -44,7 +47,7 @@ export default function DashboardMenu() {
             gdpragreement ? (
                 <main className="bg-gray-200" >
                     <section className='flex flex-col items-center justify-center h-screen  rounded-4xl '>
-                        {/*Menu for student teams and invites here*/}
+                        {/*Menu for student teams and invites*/}
                         <StudentMenu />
                         <div className="flex flex-row gap-2">
                             <button className="flex place-self-center p-3 mt-3 rounded-2xl hover:bg-gray-600 hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black" onClick={LogOut} >
@@ -58,9 +61,16 @@ export default function DashboardMenu() {
                 </main>
             ) : (
                 <div className='flex flex-col items-center justify-center h-screen  rounded-4xl'>
-                    <div className='bg-gray-600 flex items-center flex-col p-5 justify-between w-full max-w-200 text-white h-full max-h-70 rounded-2xl'>
-                        GDPR Statement Here
-                        <button onClick={() => GDPRAgreement()}>
+                    {/* GDPR Consent */}
+                    <div className='bg-gray-600 flex items-center flex-col p-5 justify-between w-full max-w-200 text-white h-full max-h-100 rounded-2xl'>
+                        <div className="text-4xl font-bold  mb-5 self-center">Consent</div>
+                        <div>
+                            By Agreeing to this message you allow this system to gather and process your personal information to display to other users and the supervisor within accepted teams.
+                            The metrics collected from Github will be the repository information and the commit information. For Trello it will be the Trello Board, Actions, Cards, Lists and Assigned Users.
+                            You can delete your account, which will remove your link in the frontend to github and trello information, however information will still be stored in the database until the team is deleted for general team metrics.
+                            For ease of collaboration, you agree for your access tokens from these accounts to be used in the backend to remove the webhook for any other user in the team if the repository or board added was yours.
+                        </div>
+                        <button onClick={() => GDPRAgreement()} className="hover:bg-gray-400 flex max-w-30 hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black p-2 rounded-2xl">
                             Agree
                         </button>
                     </div>
@@ -84,8 +94,15 @@ export default function DashboardMenu() {
                 </main>
             ) : (
                 <div className='flex flex-col items-center justify-center h-screen  rounded-4xl'>
-                    <div className='bg-gray-600 flex items-center flex-col p-5 justify-between w-full max-w-200 text-white h-full max-h-70 rounded-2xl'>
-                        <div>GDPR Statement Here</div>
+                    {/* GDPR Consent */}
+                    <div className='bg-gray-600 flex items-center flex-col p-5 justify-between w-full max-w-200 text-white h-full max-h-100 rounded-2xl'>
+                        <div className="text-4xl font-bold  mb-5 self-center">Consent</div>
+                        <div>
+                            By Agreeing to this message you allow this system to gather and process your personal information to display to other users and the supervisor within accepted teams.
+                            The metrics collected from Github will be the repository information and the commit information. For Trello it will be the Trello Board, Actions, Cards, Lists and Assigned Users.
+                            You can delete your account, which will remove your link in the frontend to github and trello information, however information will still be stored in the database until the team is deleted for general team metrics.
+                            For ease of collaboration, you agree for your access tokens from these accounts to be used in the backend to remove the webhook for any other user in the team if the repository or board added was yours.
+                        </div>
                         <button onClick={() => GDPRAgreement()} className="hover:bg-gray-400 flex max-w-30 hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black p-2 rounded-2xl">
                             Agree
                         </button>
@@ -101,6 +118,7 @@ export default function DashboardMenu() {
 
     async function LogOut() {
         const { error } = await supabase.auth.signOut()
+        console.log("signing out")
         router.push('/auth/login/')
         if (error) {
             console.log("error signing out: ", error)
@@ -125,7 +143,7 @@ export default function DashboardMenu() {
 
         const response = await res.json();
 
-        console.log("userid: sdasdasd", response);
+    //    console.log("userid: sdasdasd", response);
 
         setGDPRAgreement(response.data[0].GDPR_Agreement);
     }

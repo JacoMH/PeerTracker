@@ -23,7 +23,6 @@ export default function TopContributors({ TeamID, contributionModal, heatmapModa
     }, [])
 
     useEffect(() => {
-        // FIX THIS SORT HERE
         const sortedGithubArray = Array.prototype.toSorted.call(topContributions, (a, b) => a.CommitCount - b.CommitCount)
         const sortedTrelloArray = Array.prototype.toSorted.call(topContributions, (a, b) => a.ActionCount - b.ActionCount)
         setSortedGithubContributions(sortedGithubArray)
@@ -39,7 +38,7 @@ export default function TopContributors({ TeamID, contributionModal, heatmapModa
     }
 
     return (
-        <div className="flex flex-col items-start justify-start">
+        <div className="flex flex-col items-start justify-start text-black">
             <div className="flex flex-col items-start">
                 <select name="topcontributions" value={dropDownVal} onChange={setDropDown} id="topcontributions">
                     <option value="1" >Github</option>
@@ -93,7 +92,7 @@ export default function TopContributors({ TeamID, contributionModal, heatmapModa
             )
             }
 
-
+            
             {Array.isArray(sortedTrelloContributions) && sortedTrelloContributions.length > 0 ? (
                 dropDownVal === "2" ? (
                     <div className="overflow-y-scroll h-70">
@@ -161,7 +160,7 @@ export default function TopContributors({ TeamID, contributionModal, heatmapModa
         }
 
         const response = await res.json();
-        console.log("responseddddddd: ", response);
+     //   console.log("responseddddddd: ", response);
 
         setTopContributions(response.data);
     }

@@ -24,7 +24,7 @@ export default async function createuser(req: Request<User>, res: Response) {
         const description = body.Description;
         const Type = body.Type;
 
-        console.log("reporterid: ", reporterID, "teamid: ", TeamID, "UserID", UserID, "description: ", description);
+      //  console.log("reporterid: ", reporterID, "teamid: ", TeamID, "UserID", UserID, "description: ", description);
 
         //student on report to this one
         const insertReport = await db.insert(Notification).values({

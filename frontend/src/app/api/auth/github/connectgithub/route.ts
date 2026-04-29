@@ -10,14 +10,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No Access Token Provided" }, { status: 401 });
         }
 
-        console.log("Hello", req.body);
-
         const body = await req.json();
-        console.log("body:", body);
         const code = body.code;
         const redirect_uri = body.redirect_uri;
 
-        console.log("code here: ", code, "redirect_uri here: ", redirect_uri);
+        //    console.log("code here: ", code, "redirect_uri here: ", redirect_uri);
 
 
         const response = await fetch(`${process.env.API_URL}/router/githubconnect`, {
@@ -32,16 +29,13 @@ export async function POST(req: NextRequest) {
                 redirect_uri: redirect_uri
             })
         })
-
         if (!response.ok) {
-            console.log("Response: ", response)
-            console.error("Error response from backend:", response.status, response.statusText);
             return NextResponse.json({ error: "Error linking github account" }, { status: 500 });
         }
         const data = await response.json();
         return NextResponse.json(data);
     }
     catch {
-        return NextResponse.json({ error: "failed to fetch access_token" }, { status: 500 });
+        return NextResponse.json({ error: "failed to connect github account" }, { status: 500 });
     }
 }

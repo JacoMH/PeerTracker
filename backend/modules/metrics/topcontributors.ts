@@ -75,9 +75,12 @@ export default async function engagement(req: Request, res: Response) {
                     eq(countTrelloQuery.AccountID, trello_integrations.AccountID),
                     eq(countTrelloQuery.BoardID, TrelloBoard.BoardID)
                 ))
-                .where(eq(invites.TeamID, TeamID))
+                .where(
+                    and(
+                        eq(invites.TeamID, TeamID),
+                        eq(invites.status, "Accepted")
+                    ))
                 .groupBy(users.UserID, users.FirstName, users.LastName, countGithubQuery.CommitCount, TrelloBoard.BoardID, githubrepos.RepoID, countTrelloQuery.ActionCount, countGithubQuery.GithubUsername, countTrelloQuery.TrelloUsername)
-                .limit(5)
 
 
 

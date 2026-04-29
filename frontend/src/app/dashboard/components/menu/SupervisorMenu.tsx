@@ -48,17 +48,18 @@ export default function SupervisorMenu() {
 
     //useeeffect for searching
     return (
-        <div className='bg-gray-600 flex p-10 justify-between w-full max-w-300 h-full max-h-150 rounded-2xl'>
+        <div className='bg-gray-600 flex p-10 justify-between w-full max-w-300 h-full max-h-150 rounded-2xl text-white'>
             <div className='flex flex-col max-w-[45%] w-full'>
                 <div className="text-5xl font-bold flex justify-center mb-10">Select Team</div>
                 <div className="border rounded-4xl bg-gray-400 w-full flex justify-self-center max-h-120 h-full px-10 py-5">
+                    {/* List of teams */}
                     <div className='flex flex-col gap-5 justify-content-start overflow-y-scroll max-h-100 h-full w-full'>
                         {Array.isArray(supervisorTeam) && supervisorTeam.length > 0 ? (
                             supervisorTeam.map((team: any) => (
                                 <div key={team.TeamID} className="flex self-center flex-row justify-between w-full p-3 bg-gray-600 rounded-2xl ">
                                     <div className='self-center'>{team.TeamName ?? "Unknown"}</div>
                                     <div className="self-center"><UserIcon /></div>
-                                    <div className='self-center'>{team.MemberCount + "Members" || team.MemberCount === 1 ? "1 Member" : "0 Members"}</div>
+                                    <div className='self-center'>{team.StudentCount > 1 ? team.StudentCount + " Students" : team.StudentCount === 1 ? "1 Students" : "0 Students"}</div>
                                     <button onClick={() => router.push(`/dashboard/teams/${team.TeamID}`)} className="hover:bg-gray-400 hover:text-white text-center hover:cursor-pointer bg-gray-200 text-black p-2 rounded-2xl">View Team</button>
                                 </div>
                             ))
@@ -69,7 +70,7 @@ export default function SupervisorMenu() {
                 </div>
             </div>
 
-            <div className='flex flex-col max-w-[45%] w-full h-full'>
+            <div className='flex flex-col max-w-[45%] w-full h-full text-white'>
                 <div className="text-5xl font-bold  mb-10 self-center">Create Team</div>
                 <div className="border rounded-4xl place-content-center bg-gray-400 w-full flex justify-self-center max-h-205 h-full px-5 py-5">
                     <form onSubmit={(e) => { e.preventDefault(); createTeam() }}>
@@ -78,6 +79,7 @@ export default function SupervisorMenu() {
                             <input type='text' name='teamName' className="p-2 bg-gray-500 rounded-2xl text-white flex justify-center" value={teamName} onChange={(e) => setTeamName(e.target.value)}></input>
                         </div>
                         <div className="flex p-1">Selected Users</div>
+                        {/* Students picked for team */}
                         <div className="flex flex-row justify-between w-full">
                             <div className="flex flex-row">
                                 {Array.isArray(selectedUsers) && selectedUsers.length > 0 ? (
@@ -95,7 +97,8 @@ export default function SupervisorMenu() {
                                 )}
                             </div>
                         </div>
-                        <label htmlFor="searchBar" className="flex p-1">Search For User</label>
+                        <label htmlFor="searchBar" className="flex p-1 pt-3">Search For User</label>
+                        {/* Search for students here */}
                         <div className="flex flex-row gap-10">
                             <input type='search' name='searchBar' className=" bg-gray-500  p-2 rounded-2xl text-white flex justify-center"
                                 value={searchUser} onChange={(e) => setSearchUser(e.target.value)}>
@@ -109,7 +112,6 @@ export default function SupervisorMenu() {
                         <div className="flex flex-col my-2 justify-start bg-gray-500 rounded-2xl overflow-y-scroll w-full max-h-30 p-5 gap-2 h-full">
                             {Array.isArray(searchUserResults) && searchUserResults.length > 0 ? (
                                 searchUserResults.map((result: any) => (
-                                    //Add filter here
                                     <div key={result.UserID} className="flex self-center flex-row justify-between w-full p-3 bg-gray-600 rounded-2xl ">
                                         <div title={result.Email}>{result.FirstName} {result.LastName}</div>
                                         <button type="button" className="text-green-700 hover:text-green-500 hover:cursor-pointer"
@@ -141,7 +143,7 @@ export default function SupervisorMenu() {
     async function fetchSupervisedTeams() {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        
+
         //call for fetching teams the supervisor is heading
         const res = await fetch("/api/supervisor/fetchsupervisorteams", {
             method: 'GET',
@@ -157,14 +159,14 @@ export default function SupervisorMenu() {
 
         const response = await res.json();
 
-        console.log("response:", response);
+      //  console.log("response:", response);
         return response;
     }
 
     async function userSearch() {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
-        
+
         //searching for students to include in the team
         const res = await fetch(`/api/supervisor/usersearch?query=${searchUser}`, {
             method: 'GET',
@@ -180,7 +182,7 @@ export default function SupervisorMenu() {
 
         const response = await res.json();
 
-        console.log("response:", response.data);
+     //   console.log("response:", response.data);
         setSearchUserResults(response.data);
     }
 

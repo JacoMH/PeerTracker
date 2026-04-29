@@ -15,7 +15,7 @@ export default async function fetchuser(req: Request<User>, res: Response) {
     const userResponse = await supabaseClient.auth.getUser(access_token);
 
     const UserID = req.query.UserID || "";
-    console.log("SearchQuery: ", UserID);
+  //  console.log("SearchQuery: ", UserID);
 
     if (userResponse.error || !userResponse.data.user) {
         console.error("Error fetching user from Supabase:", userResponse.error);

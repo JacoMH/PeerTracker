@@ -10,7 +10,6 @@ interface Props {
     BoardID: String
 }
 
-
 interface githubdata {
     AccountID: string,
     CommitCount: string,
@@ -128,7 +127,8 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
         </Document>
     );
     return (
-        <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-col items-center gap-10">]
+            {/* Download PDF Button */}
             {engagementMetrics && teamMembers.length > 0 ? (
                 <div className='flex hover:cursor-pointer items-center gap-10 text-2xl p-10 bg-gray-300 rounded-2xl'>
                     <PDFDownloadLink document={<MyFile engagementMetrics={engagementMetrics} teamMembers={teamMembers} teamName={teamName} />} fileName="report.pdf">Download PDF</PDFDownloadLink>
@@ -161,7 +161,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
 
         const response = await res.json();
 
-        console.log("engagement metrics: ", response.data)
+        //    console.log("engagement metrics: ", response.data)
 
         setEngagementMetrics(response.data);
     }
@@ -170,7 +170,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
         const { data } = await supabase.auth.getSession();
         const access_token = data?.session?.access_token;
 
-        console.log("TeamID:", TeamID);
+        ///   console.log("TeamID:", TeamID);
 
         const res = await fetch(`/api/account/fetchteammembers?TeamID=${TeamID}`, {
             method: 'GET',
@@ -187,7 +187,7 @@ export default function SupervisorReports({ TeamID, RepoID, BoardID }: Props) {
         const response = await res.json();
 
 
-        console.log("Team: ", response)
+        //   console.log("Team: ", response)
         setTeamName(response.data[0].TeamName);
 
         setTeamMembers(response.data);

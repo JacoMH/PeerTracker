@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "No Access Token Provided" }, { status: 401 });
         }
 
+        //fetches an aggregate of each user commits in a team
         const params = req.nextUrl.searchParams;
         const UserID = params.get("UserID");
         const RepoID = params.get("RepoID");
