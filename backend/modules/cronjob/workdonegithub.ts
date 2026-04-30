@@ -7,9 +7,8 @@ import { db } from '../../index.ts'
 
 export async function workDoneGithub() {
     //runs daily
-    /*cron.schedule("0 0 * * *",*/ 
-    (async () => {
-        console.log("I will run every minute.")
+    /*cron.schedule("0 0 * * *",*/
+    (cron.schedule("* * * * *", async () => {
 
         //fetch the individual last commits from each user, the repo that was in and then link it to the team
 
@@ -91,5 +90,6 @@ export async function workDoneGithub() {
         }
 
 
-    })();
+    })
+    )
 }

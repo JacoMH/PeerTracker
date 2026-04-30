@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
         const code = body.code;
         const redirect_uri = body.redirect_uri;
 
-        //    console.log("code here: ", code, "redirect_uri here: ", redirect_uri);
+        //console.log("code here: ", code, "redirect_uri here: ", redirect_uri);
 
 
         const response = await fetch(`${process.env.API_URL}/router/githubconnect`, {

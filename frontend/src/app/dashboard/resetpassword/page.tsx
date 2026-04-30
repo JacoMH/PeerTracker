@@ -61,7 +61,7 @@ export default function settings() {
             if (error) {
                 console.log("error updating password: ", error);
             }
-            router.push(`dashboard/settings`)
+            router.push(`/auth/login`)
 
         }
         else {

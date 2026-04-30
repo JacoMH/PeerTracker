@@ -1,6 +1,6 @@
 import { users } from '../../db.ts'
 import { Request, Response } from 'express';
-import { db, supabaseClient } from '../../index.ts'
+import { adminAuthClient, db, supabaseClient } from '../../index.ts'
 import { eq } from 'drizzle-orm'
 
 // Interface
@@ -21,7 +21,7 @@ export default async function deleteuser(req: Request, res: Response) {
 
         //delete from supabase auth
         if (userID) {
-            const { data, error } = await supabaseClient.auth.admin.deleteUser(
+            const { data, error } = await adminAuthClient.deleteUser(
                 userID
             )
 

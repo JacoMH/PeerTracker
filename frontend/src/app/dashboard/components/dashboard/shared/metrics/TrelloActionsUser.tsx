@@ -244,7 +244,7 @@ export default function TrelloActionsUser({ TeamID, UserID, BoardID, sendModal }
 
         const response = await res.json();
 
-     //   console.log("trello actions for graph: ", response.data)
+        console.log("trello actions for graph: ", response.data)
 
         setTrelloActionForGraph(response.data);
     }
